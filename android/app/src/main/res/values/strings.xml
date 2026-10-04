@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kişisel Muhasebe</string>
+    <string name="title_activity_main">Kişisel Muhasebe</string>
+    <string name="package_name">com.kisiselmuhasebe.app</string>
+    <string name="custom_url_scheme">com.kisiselmuhasebe.app</string>
+</resources>
