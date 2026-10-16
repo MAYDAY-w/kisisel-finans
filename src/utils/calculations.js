@@ -4,9 +4,10 @@ import { TRANSACTION_TYPES } from '../types/index.js';
  * Calculates total balance, total income, total expenses, net savings, etc.
  * @param {Array} transactions
  * @param {Array} investments
+ * @param {Array} accounts
  * @returns {Object}
  */
-export function calculateFinancialSummary(transactions = [], investments = []) {
+export function calculateFinancialSummary(transactions = [], investments = [], accounts = []) {
   let totalIncome = 0;
   let totalExpenses = 0;
   let totalPurchases = 0;
@@ -58,20 +59,34 @@ export function calculateFinancialSummary(transactions = [], investments = []) {
     }
   });
 
-  // Net Cash Balance: (Income + Sales) - (Expenses + Purchases + Investment Outlay)
-  const totalBalance = totalIncome + totalSales - (totalExpenses + totalPurchases + totalInvestmentOutlay);
+  // Net Cash Balance: Sum of all account balances
+  const totalBalance = accounts.reduce((sum, acc) => sum + (Number(acc.balance) || 0), 0);
 
   // Investment Portfolio calculations
   let totalInvestmentCost = 0;
   let totalInvestmentCurrentValue = 0;
+  let liquidInterestValue = 0;
 
   investments.forEach((inv) => {
-    const qty = Number(inv.quantity) || 0;
-    const buyPrice = Number(inv.purchasePrice) || 0;
-    const currPrice = Number(inv.currentPrice !== undefined ? inv.currentPrice : inv.purchasePrice) || 0;
+    const isLiquidAccount = inv.type === 'daily_interest' && inv.accountId;
+    const linkedAcc = isLiquidAccount ? accounts.find((a) => a.id === inv.accountId) : null;
 
-    const cost = qty * buyPrice;
-    const val = qty * currPrice;
+    const qty = Number(inv.quantity) || 1;
+    const additionsTotal = (inv.additions || []).reduce(
+      (sum, a) => sum + (Number(a.amount) || 0),
+      0
+    );
+    const cumulativeEarned = Number(inv.totalEarnedInterest) || 0;
+    const liveBal = linkedAcc ? Number(linkedAcc.balance) : (Number(inv.currentPrice !== undefined ? inv.currentPrice : inv.purchasePrice) || 0);
+
+    const cost = isLiquidAccount
+      ? Math.max(0, liveBal - cumulativeEarned)
+      : ((qty * (Number(inv.purchasePrice) || 0)) + additionsTotal);
+    const val = isLiquidAccount ? liveBal : (qty * (Number(inv.currentPrice !== undefined ? inv.currentPrice : inv.purchasePrice) || 0));
+
+    if (isLiquidAccount) {
+      liquidInterestValue += val;
+    }
 
     totalInvestmentCost += cost;
     totalInvestmentCurrentValue += val;
@@ -85,8 +100,10 @@ export function calculateFinancialSummary(transactions = [], investments = []) {
   const monthlySavings = monthlyIncome - monthlyExpenses;
   const monthlySavingsRate = monthlyIncome > 0 ? (monthlySavings / monthlyIncome) * 100 : 0;
 
-  // Net Worth (Balance + Current Investment Portfolio Value)
-  const netWorth = totalBalance + totalInvestmentCurrentValue;
+  // Net Worth (Balance + Current Non-Liquid Investment Portfolio Value)
+  // Liquid daily interest is already in totalBalance (account balance), so we don't count it twice
+  const nonLiquidInvestmentsValue = totalInvestmentCurrentValue - liquidInterestValue;
+  const netWorth = totalBalance + nonLiquidInvestmentsValue;
 
   return {
     totalBalance,

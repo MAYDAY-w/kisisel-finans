@@ -20,6 +20,7 @@ export function DataBackup() {
     importFromJSON,
     resetAllData,
     reloadSampleData,
+    t,
   } = useFinance();
 
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -38,18 +39,18 @@ export function DataBackup() {
         if (res.success) {
           setImportStatus({
             type: 'success',
-            message: `Yedek başarıyla yüklendi! (${res.count} işlem aktarıldı)`,
+            message: t('dataBackup.importSuccess', { count: res.count }),
           });
         } else {
           setImportStatus({
             type: 'error',
-            message: `Hata: ${res.error || 'Dosya okunamadı.'}`,
+            message: t('dataBackup.importError', { error: res.error || 'Dosya okunamadı' }),
           });
         }
       } catch (err) {
         setImportStatus({
           type: 'error',
-          message: 'Geçersiz JSON dosyası.',
+          message: t('dataBackup.invalidJson'),
         });
       }
       // Reset input
@@ -62,9 +63,9 @@ export function DataBackup() {
   return (
     <Card padding="p-5" className="space-y-5">
       <div>
-        <h3 className="text-base font-bold text-slate-900">Veri Yedekleme & Yönetim</h3>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Verileriniz tarayıcınızda yerel olarak saklanır. Dilediğiniz zaman dışa aktarıp yedekleyebilirsiniz.
+        <h3 className="text-base font-bold text-slate-900 dark:text-white">{t('dataBackup.title')}</h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          {t('dataBackup.subtitle')}
         </p>
       </div>
 
@@ -72,14 +73,14 @@ export function DataBackup() {
         <div
           className={`p-3.5 rounded-xl text-xs flex items-center gap-2 animate-slide-up ${
             importStatus.type === 'success'
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-              : 'bg-rose-50 text-rose-800 border border-rose-200'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+              : 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
           }`}
         >
           {importStatus.type === 'success' ? (
-            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           ) : (
-            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
           )}
           <span>{importStatus.message}</span>
         </div>
@@ -87,46 +88,46 @@ export function DataBackup() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Export JSON */}
-        <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col justify-between gap-3">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex flex-col justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
-              <Download className="w-4 h-4 text-emerald-600" />
-              <span>JSON Tam Yedek İndir</span>
+            <div className="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-bold text-sm">
+              <Download className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+              <span>{t('dataBackup.jsonExportTitle')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              İşlemler, yatırımlar ve tüm ayarlarınızı tek dosya halinde indirir.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {t('dataBackup.jsonExportDesc')}
             </p>
           </div>
           <Button size="sm" variant="outline" onClick={exportJSON}>
-            Yedeği İndir (.json)
+            {t('dataBackup.jsonExportBtn')}
           </Button>
         </div>
 
         {/* Export CSV */}
-        <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col justify-between gap-3">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex flex-col justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
-              <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-              <span>Excel / CSV Dökümü Al</span>
+            <div className="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-bold text-sm">
+              <FileSpreadsheet className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+              <span>{t('dataBackup.csvExportTitle')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              İşlem geçmişinizi Microsoft Excel ve Google E-Tablolar uyumlu CSV formatında aktarır.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {t('dataBackup.csvExportDesc')}
             </p>
           </div>
           <Button size="sm" variant="outline" onClick={exportCSV}>
-            Tabloyu İndir (.csv)
+            {t('dataBackup.csvExportBtn')}
           </Button>
         </div>
 
         {/* Import JSON */}
-        <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col justify-between gap-3">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex flex-col justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
-              <Upload className="w-4 h-4 text-emerald-600" />
-              <span>Yedekten Geri Yükle</span>
+            <div className="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-bold text-sm">
+              <Upload className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+              <span>{t('dataBackup.jsonImportTitle')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              Daha önce indirdiğiniz bir .json yedek dosyasını geri yükleyin.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {t('dataBackup.jsonImportDesc')}
             </p>
           </div>
           <div>
@@ -143,20 +144,20 @@ export function DataBackup() {
               variant="outline"
               onClick={() => fileInputRef.current?.click()}
             >
-              Dosya Seç (.json)
+              {t('dataBackup.jsonImportBtn')}
             </Button>
           </div>
         </div>
 
         {/* Sample Data */}
-        <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col justify-between gap-3">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-2xl flex flex-col justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
-              <RefreshCw className="w-4 h-4 text-indigo-600" />
-              <span>Örnek Verileri Yükle</span>
+            <div className="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-bold text-sm">
+              <RefreshCw className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span>{t('dataBackup.sampleDataTitle')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              Uygulamayı test etmek için gerçekçi örnek finansal veriler yükler.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {t('dataBackup.sampleDataDesc')}
             </p>
           </div>
           <Button
@@ -166,20 +167,20 @@ export function DataBackup() {
               reloadSampleData();
               setImportStatus({
                 type: 'success',
-                message: 'Örnek demo verileri başarıyla yüklendi.',
+                message: t('dataBackup.sampleSuccess'),
               });
             }}
           >
-            Örnekleri Yükle
+            {t('dataBackup.sampleDataBtn')}
           </Button>
         </div>
       </div>
 
       {/* Danger Zone: Clear all */}
-      <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between flex-wrap gap-3">
+      <div className="pt-3 border-t border-slate-200/80 dark:border-slate-700 flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h4 className="text-xs font-bold text-rose-600 uppercase tracking-wider">Tehlikeli Bölge</h4>
-          <p className="text-xs text-slate-500">Tüm işlemleri, yatırımları ve verileri kalıcı olarak siler.</p>
+          <h4 className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">{t('dataBackup.dangerZoneTitle')}</h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('dataBackup.dangerZoneDesc')}</p>
         </div>
         <Button
           size="sm"
@@ -187,7 +188,7 @@ export function DataBackup() {
           icon={Trash2}
           onClick={() => setShowClearConfirm(true)}
         >
-          Tüm Verileri Sıfırla
+          {t('dataBackup.resetAllBtn')}
         </Button>
       </div>
 
@@ -199,12 +200,12 @@ export function DataBackup() {
           resetAllData();
           setImportStatus({
             type: 'success',
-            message: 'Tüm veriler başarıyla sıfırlandı.',
+            message: t('dataBackup.resetSuccess'),
           });
         }}
-        title="Tüm Verileri Sıfırla"
-        message="Tüm gelir-gider kayıtlarınız, yatırımlarınız ve kategorileriniz kalıcı olarak silinecektir. Bu işlem geri alınamaz!"
-        confirmText="Evet, Hepsini Sil"
+        title={t('dataBackup.resetConfirmTitle')}
+        message={t('dataBackup.resetConfirmMsg')}
+        confirmText={t('dataBackup.resetConfirmBtn')}
       />
     </Card>
   );

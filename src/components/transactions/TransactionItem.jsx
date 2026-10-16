@@ -26,7 +26,11 @@ export function TransactionItem({ transaction }) {
     openAddTransactionModal,
     duplicateTransaction,
     deleteTransaction,
-    openReceiptViewer
+    openReceiptViewer,
+    t,
+    getCategoryName,
+    getTransactionTypeName,
+    language,
   } = useFinance();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -57,7 +61,7 @@ export function TransactionItem({ transaction }) {
 
   return (
     <>
-      <div className="relative group bg-white hover:bg-slate-50/80 p-3.5 sm:p-4 rounded-2xl border border-slate-100 shadow-sm hover:border-slate-200 transition-all flex items-center justify-between gap-3">
+      <div className="relative group bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 p-3.5 sm:p-4 rounded-2xl border border-slate-100 dark:border-slate-800/90 shadow-sm hover:border-slate-200 dark:hover:border-slate-700 transition-all flex items-center justify-between gap-3">
         {/* Left: Icon & Info */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div
@@ -68,11 +72,11 @@ export function TransactionItem({ transaction }) {
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="text-sm font-bold text-slate-900 truncate">
-                {transaction.description || transaction.categoryName || 'İşlem'}
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                {transaction.description || getCategoryName(transaction.categoryId, transaction.categoryName) || t('transactions.transaction', 'İşlem')}
               </h4>
               <Badge variant={typeConfig.color} size="sm">
-                {typeConfig.label}
+                {getTransactionTypeName(transaction.type, typeConfig.label)}
               </Badge>
 
               {/* Receipt indicator badge */}
@@ -86,17 +90,19 @@ export function TransactionItem({ transaction }) {
                       amountFormatted: isPositive ? `+${amountFormatted}` : `-${amountFormatted}`,
                     })
                   }
-                  className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-md transition-colors"
-                  title="Fiş görselini görüntüle"
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-md transition-colors"
+                  title={language === 'en' ? 'View receipt image' : 'Fiş görselini görüntüle'}
                 >
-                  <Camera className="w-3 h-3 text-emerald-600" />
-                  <span>{receiptCount > 1 ? `${receiptCount} Fiş` : 'Fiş'}</span>
+                  <Camera className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  <span>{receiptCount > 1 ? `${receiptCount} ${language === 'en' ? 'Receipts' : 'Fiş'}` : (language === 'en' ? 'Receipt' : 'Fiş')}</span>
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
-              <span className="font-medium text-slate-600">{transaction.categoryName || 'Genel'}</span>
+            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-1 flex-wrap">
+              <span className="font-medium text-slate-600 dark:text-slate-300">
+                {getCategoryName(transaction.categoryId, transaction.categoryName) || (language === 'en' ? 'General' : 'Genel')}
+              </span>
               <span>•</span>
               <span>{formatDate(transaction.date, 'relative')}</span>
 
@@ -104,9 +110,9 @@ export function TransactionItem({ transaction }) {
               {transaction.quantity && (
                 <>
                   <span>•</span>
-                  <span className="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded text-[11px]">
+                  <span className="inline-flex items-center gap-1 text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[11px]">
                     <Package className="w-3 h-3 text-slate-400" />
-                    {transaction.quantity} adet
+                    {transaction.quantity} {language === 'en' ? 'pcs' : 'adet'}
                     {transaction.unitPrice ? ` @ ${formatMoney(transaction.unitPrice)}` : ''}
                   </span>
                 </>
@@ -114,7 +120,7 @@ export function TransactionItem({ transaction }) {
             </div>
 
             {transaction.note && (
-              <p className="text-[11px] text-slate-400 italic truncate mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 italic mt-1 leading-relaxed whitespace-pre-wrap">
                 "{transaction.note}"
               </p>
             )}
@@ -126,7 +132,7 @@ export function TransactionItem({ transaction }) {
           <div className="text-right">
             <div
               className={`text-sm sm:text-base font-extrabold tracking-tight ${
-                isPositive ? 'text-emerald-600' : 'text-slate-900'
+                isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'
               }`}
             >
               {isPositive ? `+${amountFormatted}` : `-${amountFormatted}`}
@@ -138,7 +144,7 @@ export function TransactionItem({ transaction }) {
             <button
               type="button"
               onClick={() => setShowMenu(!showMenu)}
-              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
+              className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
             >
               <MoreVertical className="w-4 h-4" />
             </button>
@@ -149,7 +155,7 @@ export function TransactionItem({ transaction }) {
                   className="fixed inset-0 z-20"
                   onClick={() => setShowMenu(false)}
                 />
-                <div className="absolute right-0 top-full mt-1 w-36 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-30 animate-slide-up text-xs font-medium">
+                <div className="absolute right-0 top-full mt-1 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 py-1.5 z-30 animate-slide-up text-xs font-medium text-slate-700 dark:text-slate-200">
                   {receiptCount > 0 && (
                     <button
                       type="button"
@@ -161,10 +167,10 @@ export function TransactionItem({ transaction }) {
                           amountFormatted: isPositive ? `+${amountFormatted}` : `-${amountFormatted}`,
                         });
                       }}
-                      className="w-full text-left px-3.5 py-2 text-emerald-700 hover:bg-emerald-50 flex items-center gap-2 font-semibold"
+                      className="w-full text-left px-3.5 py-2 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 flex items-center gap-2 font-semibold"
                     >
-                      <Camera className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Fişi Gör</span>
+                      <Camera className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span>{language === 'en' ? 'View Receipt' : 'Fişi Gör'}</span>
                     </button>
                   )}
 
@@ -174,10 +180,10 @@ export function TransactionItem({ transaction }) {
                       setShowMenu(false);
                       openAddTransactionModal(transaction);
                     }}
-                    className="w-full text-left px-3.5 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                    className="w-full text-left px-3.5 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/80 flex items-center gap-2"
                   >
-                    <Edit2 className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Düzenle</span>
+                    <Edit2 className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                    <span>{t('common.edit')}</span>
                   </button>
 
                   <button
@@ -186,13 +192,13 @@ export function TransactionItem({ transaction }) {
                       setShowMenu(false);
                       duplicateTransaction(transaction.id);
                     }}
-                    className="w-full text-left px-3.5 py-2 text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                    className="w-full text-left px-3.5 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/80 flex items-center gap-2"
                   >
-                    <Copy className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Kopyala</span>
+                    <Copy className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                    <span>{t('common.copy')}</span>
                   </button>
 
-                  <div className="border-t border-slate-100 my-1" />
+                  <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
 
                   <button
                     type="button"
@@ -200,10 +206,10 @@ export function TransactionItem({ transaction }) {
                       setShowMenu(false);
                       setShowDeleteConfirm(true);
                     }}
-                    className="w-full text-left px-3.5 py-2 text-rose-600 hover:bg-rose-50 flex items-center gap-2 font-semibold"
+                    className="w-full text-left px-3.5 py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 flex items-center gap-2 font-semibold"
                   >
-                    <Trash2 className="w-3.5 h-3.5 text-rose-500" />
-                    <span>Sil</span>
+                    <Trash2 className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400" />
+                    <span>{t('common.delete')}</span>
                   </button>
                 </div>
               </>
@@ -217,9 +223,9 @@ export function TransactionItem({ transaction }) {
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
         onConfirm={() => deleteTransaction(transaction.id)}
-        title="İşlemi Sil"
-        message={`"${transaction.description || 'Bu işlem'}" kaydını kalıcı olarak silmek istediğinize emin misiniz?`}
-        confirmText="Evet, Sil"
+        title={t('common.delete')}
+        message={language === 'en' ? `Are you sure you want to delete "${transaction.description || 'this transaction'}"? This action cannot be undone.` : `"${transaction.description || 'Bu işlem'}" kaydını kalıcı olarak silmek istediğinize emin misiniz?`}
+        confirmText={language === 'en' ? 'Yes, Delete' : 'Evet, Sil'}
       />
     </>
   );

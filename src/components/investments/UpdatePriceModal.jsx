@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
@@ -11,6 +11,7 @@ export function UpdatePriceModal() {
     updateInvestmentPrice,
     formatMoney,
     settings,
+    t,
   } = useFinance();
 
   const [newPrice, setNewPrice] = useState('');
@@ -44,34 +45,36 @@ export function UpdatePriceModal() {
     e.preventDefault();
     const parsed = parseFloat(newPrice.toString().replace(',', '.'));
     if (isNaN(parsed) || parsed < 0) {
-      alert('Lütfen geçerli bir fiyat girin.');
+      alert(t('transfer.validAmountError') || 'Lütfen geçerli bir fiyat girin.');
       return;
     }
     updateInvestmentPrice(priceUpdateTarget.id, parsed);
     closePriceUpdateModal();
   };
 
+  const currSymbol = settings.currency === 'USD' ? '$' : settings.currency === 'EUR' ? '€' : settings.currency === 'GBP' ? '£' : '₺';
+
   return (
     <Modal
       isOpen={Boolean(priceUpdateTarget)}
       onClose={closePriceUpdateModal}
-      title="Güncel Fiyatı Güncelle"
-      subtitle={`${priceUpdateTarget.name} için birim piyasa fiyatını güncelleyin`}
+      title={t('priceUpdateModal.title')}
+      subtitle={t('priceUpdateModal.subtitle', { name: priceUpdateTarget.name })}
       maxWidth="max-w-md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Info card */}
         <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl text-xs space-y-1">
           <div className="flex justify-between text-slate-600">
-            <span>Miktar:</span>
+            <span>{t('priceUpdateModal.quantity')}</span>
             <span className="font-bold">{qty} {priceUpdateTarget.unit || 'adet'}</span>
           </div>
           <div className="flex justify-between text-slate-600">
-            <span>Alış Birim Fiyatı:</span>
+            <span>{t('priceUpdateModal.costPerUnit')}</span>
             <span>{formatMoney(priceUpdateTarget.purchasePrice)}</span>
           </div>
           <div className="flex justify-between text-slate-600">
-            <span>Toplam Maliyet:</span>
+            <span>{t('priceUpdateModal.totalCost')}</span>
             <span>{formatMoney(totalCost)}</span>
           </div>
         </div>
@@ -79,7 +82,7 @@ export function UpdatePriceModal() {
         {/* Input */}
         <div>
           <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
-            Güncel Birim Fiyat ({settings.currency === 'USD' ? '$' : settings.currency === 'EUR' ? '€' : settings.currency === 'GBP' ? '£' : '₺'})
+            {t('priceUpdateModal.currentUnitPrice', { currency: currSymbol })}
           </label>
           <input
             ref={inputRef}
@@ -96,11 +99,11 @@ export function UpdatePriceModal() {
         {/* Live Calculation Preview */}
         <div className="p-3 bg-emerald-50/60 border border-emerald-200/60 rounded-xl text-xs space-y-1">
           <div className="flex justify-between text-slate-700">
-            <span>Yeni Toplam Portföy Değeri:</span>
+            <span>{t('priceUpdateModal.newTotalValue')}</span>
             <span className="font-extrabold text-slate-900">{formatMoney(totalVal)}</span>
           </div>
           <div className="flex justify-between text-slate-700">
-            <span>Tahmini Net Kâr/Zarar:</span>
+            <span>{t('priceUpdateModal.estProfitLoss')}</span>
             <span className={`font-bold ${profit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
               {formatMoney(profit, true)}
             </span>
@@ -110,10 +113,10 @@ export function UpdatePriceModal() {
         {/* Buttons */}
         <div className="grid grid-cols-2 gap-3 pt-2">
           <Button variant="secondary" onClick={closePriceUpdateModal}>
-            Vazgeç
+            {t('common.cancel')}
           </Button>
           <Button type="submit" variant="primary" icon={RefreshCw} className="font-bold">
-            Fiyatı Kaydet
+            {t('priceUpdateModal.savePriceBtn')}
           </Button>
         </div>
       </form>

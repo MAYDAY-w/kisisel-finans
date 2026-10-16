@@ -77,7 +77,7 @@ export function parseSpeechTransaction(transcript, categories = DEFAULT_CATEGORI
   // 2. Determine Transaction Type
   let type = TRANSACTION_TYPES.EXPENSE; // Default is expense
 
-  const incomeKeywords = ['maaş', 'gelir', 'yattı', 'kazandım', 'tahsilat', 'prim', 'avans', 'burs', 'alındı', 'geldi', 'ek gelir'];
+  const incomeKeywords = ['maaş', 'gelir', 'yattı', 'kazandım', 'tahsilat', 'prim', 'avans', 'burs', 'alındı', 'geldi', 'ek gelir', 'faiz', 'faiz kazancı', 'nemalanma', 'temettü', 'kira geliri'];
   const purchaseKeywords = ['aldım', 'alım', 'satın aldım', 'gram altın', 'hisse', 'döviz', 'telefon aldım', 'cihaz'];
   const saleKeywords = ['sattım', 'satış', 'ikinci el sattım'];
   const investmentKeywords = ['yatırım yaptım', 'fona yatırdım', 'kripto aldım', 'borsaya yatırdım', 'hisse aldım'];
@@ -95,21 +95,37 @@ export function parseSpeechTransaction(transcript, categories = DEFAULT_CATEGORI
   // 3. Category matching
   let matchedCategoryId = 'other';
   const categoryKeywords = {
+    interest: ['faiz', 'nemalanma', 'faiz kazancı', 'gecelik faiz', 'vadeli faiz', 'günlük faiz'],
+    rent: ['kira', 'ev kirası', 'dükkan kirası', 'kira ödemesi'],
+    dues: ['aidat', 'apartman aidatı', 'site aidatı'],
+    subscriptions: ['abonelik', 'netflix', 'spotify', 'youtube premium', 'icloud', 'disney', 'amazon prime'],
     food: ['market', 'yemek', 'bakkal', 'restoran', 'kafe', 'kahve', 'lokanta', 'ekmek', 'manav', 'kasap', 'süpermarket', 'migros', 'a101', 'bim', 'şok'],
     transport: ['benzin', 'mazot', 'akaryakıt', 'yakıt', 'otobüs', 'metro', 'taksi', 'dolmuş', 'bilet', 'uçak', 'otopark', 'akbil', 'hgs', 'ogs'],
-    shopping: ['avm', 'kıyafet', 'ayakkabı', 'giyim', 'trendyol', 'hepsiburada', 'amazon', 'alışveriş', 'pantolon', 'gömlek'],
-    bills: ['fatura', 'kira', 'aidat', 'elektrik', 'su', 'doğalgaz', 'internet', 'telefon faturası', 'abonelik', 'netflix', 'spotify'],
-    salary: ['maaş', 'ücret', 'aylık', 'prim', 'ikramiye', 'avans'],
+    clothing: ['kıyafet', 'ayakkabı', 'giyim', 'pantolon', 'gömlek', 'elbise', 'mont', 'ceket', 'zara', 'mango'],
+    shopping: ['avm', 'trendyol', 'hepsiburada', 'amazon', 'alışveriş'],
+    personal_care: ['kuaför', 'berber', 'kozmetik', 'bakım', 'makyaj', 'parfüm'],
+    home: ['mobilya', 'dekorasyon', 'ikea', 'ev eşyası', 'beyaz eşya'],
+    travel: ['tatil', 'otel', 'uçak bileti', 'tur', 'gezi', 'seyahat'],
+    pet: ['veteriner', 'mama', 'kedi', 'köpek', 'petshop', 'evcil hayvan'],
+    dividend: ['temettü', 'kar payı', 'kâr payı'],
+    rental_income: ['kira geliri', 'kiracı yattı', 'kira aldım'],
+    bonus: ['ikramiye', 'prim', 'performans primi', 'bayram harçlığı'],
+    insurance: ['sigorta', 'kasko', 'dask', 'trafik sigortası', 'sağlık sigortası'],
+    tax: ['vergi', 'mtv', 'harç', 'gelir vergisi', 'kdv', 'stopaj'],
+    gift: ['hediye', 'bağış', 'yardım', 'sadaka'],
+    kids: ['bebek', 'çocuk', 'oyuncak', 'bebek bezi', 'kreş'],
+    bills: ['fatura', 'elektrik', 'su', 'doğalgaz', 'internet', 'telefon faturası'],
+    salary: ['maaş', 'ücret', 'aylık', 'avans'],
     investment: ['fon', 'tefas', 'portföy', 'yatırım', 'eurobond'],
     gold: ['altın', 'gram altın', 'çeyrek', 'yarım', 'kuyumcu', 'bilezik'],
     stocks: ['hisse', 'borsa', 'bist', 'thyao', 'tüpraş', 'eregl', 'senedi'],
     crypto: ['kripto', 'bitcoin', 'btc', 'eth', 'ethereum', 'coin', 'binance'],
     foreign_currency: ['dolar', 'euro', 'döviz', 'sterlin', 'usd', 'eur'],
     electronics: ['bilgisayar', 'telefon', 'laptop', 'tablet', 'kulaklık', 'monitör', 'televizyon'],
-    vehicle: ['araba', 'araç', 'bakım', 'muayene', 'sigorta', 'kasko', 'lastik', 'tamir'],
+    vehicle: ['araba', 'araç', 'bakım', 'muayene', 'lastik', 'tamir'],
     health: ['eczane', 'ilaç', 'hastane', 'doktor', 'sağlık', 'diş'],
     education: ['kurs', 'kitap', 'okul', 'eğitim', 'harç', 'üniversite'],
-    entertainment: ['sinema', 'tiyatro', 'konser', 'oyun', 'tatil', 'otel', 'eğlence'],
+    entertainment: ['sinema', 'tiyatro', 'konser', 'oyun', 'eğlence'],
   };
 
   for (const [catId, keywords] of Object.entries(categoryKeywords)) {

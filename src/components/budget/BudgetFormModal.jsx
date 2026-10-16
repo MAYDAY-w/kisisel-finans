@@ -4,7 +4,7 @@ import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 
 export function BudgetFormModal() {
-  const { isBudgetModalOpen, closeBudgetModal, editingBudget, setBudget, categories } = useFinance();
+  const { isBudgetModalOpen, closeBudgetModal, editingBudget, setBudget, categories, t, getCategoryName } = useFinance();
 
   const [categoryId, setCategoryId] = useState(categories[0]?.id || 'food');
   const [limit, setLimit] = useState('');
@@ -25,7 +25,7 @@ export function BudgetFormModal() {
     e.preventDefault();
     const parsedLimit = parseFloat(limit.replace(',', '.'));
     if (isNaN(parsedLimit) || parsedLimit <= 0) {
-      alert('Lütfen geçerli bir bütçe limiti giriniz.');
+      alert(t('transfer.validAmountError') || 'Geçerli bir tutar giriniz.');
       return;
     }
 
@@ -44,15 +44,15 @@ export function BudgetFormModal() {
     <Modal
       isOpen={isBudgetModalOpen}
       onClose={closeBudgetModal}
-      title={editingBudget ? 'Bütçeyi Düzenle' : 'Yeni Kategori Bütçesi'}
-      subtitle="Belirlediğiniz kategoride aylık harcama limiti koyun"
+      title={editingBudget ? t('budget.editBudget') : t('budget.newBudget')}
+      subtitle={t('budget.subtitle')}
       maxWidth="max-w-md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Category */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Kategori
+            {t('budget.category')}
           </label>
           <select
             value={categoryId}
@@ -60,23 +60,23 @@ export function BudgetFormModal() {
             disabled={Boolean(editingBudget)}
             className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
           >
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {getCategoryName(cat.id, cat.name)}
+                </option>
+              ))}
           </select>
         </div>
 
         {/* Limit */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Aylık Harcama Limiti (TL)
+            {t('budget.monthlyLimit')}
           </label>
           <input
             type="number"
             step="any"
-            placeholder="Örn: 8000"
+            placeholder="8000"
             value={limit}
             onChange={(e) => setLimit(e.target.value)}
             required
@@ -86,10 +86,10 @@ export function BudgetFormModal() {
 
         <div className="grid grid-cols-2 gap-3 pt-2">
           <Button variant="secondary" onClick={closeBudgetModal}>
-            Vazgeç
+            {t('common.cancel')}
           </Button>
           <Button type="submit" variant="primary" className="font-bold">
-            Bütçeyi Kaydet
+            {t('common.save')}
           </Button>
         </div>
       </form>

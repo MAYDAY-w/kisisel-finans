@@ -6,6 +6,7 @@ export const INITIAL_SETTINGS = {
   lastUsedType: TRANSACTION_TYPES.EXPENSE,
   theme: 'light',
   hasSeenWelcome: true,
+  geminiApiKey: '',
 };
 
 // Sıfırlanmış, kullanıma hazır temiz başlangıç verileri

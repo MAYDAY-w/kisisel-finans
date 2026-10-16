@@ -14,6 +14,10 @@ export function TransactionList() {
     openAddTransactionModal,
     exportCSV,
     formatMoney,
+    initialTransactionFilter,
+    setInitialTransactionFilter,
+    t,
+    language,
   } = useFinance();
 
   // Filter states
@@ -21,6 +25,21 @@ export function TransactionList() {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [dateRange, setDateRange] = useState('all');
+
+  React.useEffect(() => {
+    if (initialTransactionFilter && initialTransactionFilter !== 'all') {
+      if (initialTransactionFilter === 'income_this_month') {
+        setSelectedType('income');
+        setDateRange('this_month');
+      } else if (initialTransactionFilter === 'expense_this_month') {
+        setSelectedType('expense');
+        setDateRange('this_month');
+      } else {
+        setSelectedType(initialTransactionFilter);
+      }
+      setInitialTransactionFilter('all');
+    }
+  }, [initialTransactionFilter, setInitialTransactionFilter]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [sortBy, setSortBy] = useState('date_desc'); // 'date_desc' | 'date_asc' | 'amount_desc' | 'amount_asc'
@@ -146,11 +165,11 @@ export function TransactionList() {
       {/* Top Header & Export */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            İşlem Geçmişi
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {t('transactions.title')}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Tüm gelir, gider, alış ve satış hareketlerinizi inceleyin
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            {t('transactions.subtitle')}
           </p>
         </div>
 
@@ -162,7 +181,7 @@ export function TransactionList() {
             icon={Download}
             className="text-xs"
           >
-            CSV / Excel İndir
+            {t('transactions.exportCsv', 'CSV / Excel İndir')}
           </Button>
           <Button
             size="sm"
@@ -170,13 +189,13 @@ export function TransactionList() {
             icon={Plus}
             className="text-xs"
           >
-            İşlem Ekle
+            {t('dashboard.addTransaction', 'İşlem Ekle')}
           </Button>
         </div>
       </div>
 
       {/* Filters Card */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
         <TransactionFilters
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -196,10 +215,10 @@ export function TransactionList() {
         />
 
         {/* Filtered Overview Stats Bar */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600 flex-wrap gap-2">
+        <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 flex-wrap gap-2">
           <div className="flex items-center gap-3">
             <span>
-              <strong>{filteredSummary.count}</strong> işlem bulundu
+              <strong>{filteredSummary.count}</strong> {language === 'en' ? 'transactions found' : 'işlem bulundu'}
             </span>
             <span>•</span>
             <span className="text-emerald-600 font-semibold">
@@ -217,12 +236,12 @@ export function TransactionList() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-transparent text-xs font-medium text-slate-600 focus:outline-none cursor-pointer"
+              className="bg-transparent text-xs font-medium text-slate-600 dark:text-slate-300 focus:outline-none cursor-pointer"
             >
-              <option value="date_desc">Tarihe Göre (En Yeni)</option>
-              <option value="date_asc">Tarihe Göre (En Eski)</option>
-              <option value="amount_desc">Tutara Göre (En Yüksek)</option>
-              <option value="amount_asc">Tutara Göre (En Düşük)</option>
+              <option value="date_desc">{language === 'en' ? 'By Date (Newest)' : 'Tarihe Göre (En Yeni)'}</option>
+              <option value="date_asc">{language === 'en' ? 'By Date (Oldest)' : 'Tarihe Göre (En Eski)'}</option>
+              <option value="amount_desc">{language === 'en' ? 'By Amount (Highest)' : 'Tutara Göre (En Yüksek)'}</option>
+              <option value="amount_asc">{language === 'en' ? 'By Amount (Lowest)' : 'Tutara Göre (En Düşük)'}</option>
             </select>
           </div>
         </div>
@@ -234,11 +253,11 @@ export function TransactionList() {
           {groupedTransactions.map(([dateKey, items]) => (
             <div key={dateKey} className="space-y-2.5">
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {formatDate(dateKey, 'long')}
                 </span>
-                <span className="text-xs text-slate-400 font-medium">
-                  {items.length} işlem
+                <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+                  {items.length} {language === 'en' ? 'transactions' : 'işlem'}
                 </span>
               </div>
 
@@ -252,21 +271,21 @@ export function TransactionList() {
         </div>
       ) : (
         /* Empty State */
-        <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center flex flex-col items-center">
-          <div className="w-14 h-14 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center mb-3">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-12 text-center flex flex-col items-center">
+          <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800/60 text-slate-400 flex items-center justify-center mb-3">
             <Inbox className="w-7 h-7" />
           </div>
-          <h3 className="text-base font-bold text-slate-800 mb-1">
-            İşlem Bulunamadı
+          <h3 className="text-base font-bold text-slate-800 dark:text-white mb-1">
+            {t('common.empty')}
           </h3>
-          <p className="text-xs text-slate-500 max-w-xs mb-5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mb-5">
             {hasActiveFilters
-              ? 'Belirttiğiniz filtreleme kriterlerine uygun kayıt bulunamadı.'
-              : 'Henüz kaydedilmiş bir finansal işlem yok. İlk işleminizi hemen ekleyin.'}
+              ? (language === 'en' ? 'No transactions matched your selected filter criteria.' : 'Belirttiğiniz filtreleme kriterlerine uygun kayıt bulunamadı.')
+              : (language === 'en' ? 'No transactions recorded yet. Add your first transaction now.' : 'Henüz kaydedilmiş bir finansal işlem yok. İlk işleminizi hemen ekleyin.')}
           </p>
           {hasActiveFilters ? (
             <Button variant="outline" size="sm" onClick={resetFilters}>
-              Filtreleri Temizle
+              {language === 'en' ? 'Clear Filters' : 'Filtreleri Temizle'}
             </Button>
           ) : (
             <Button
@@ -275,7 +294,7 @@ export function TransactionList() {
               icon={Plus}
               onClick={() => openAddTransactionModal()}
             >
-              Yeni İşlem Ekle
+              {t('dashboard.addTransaction', 'Yeni İşlem Ekle')}
             </Button>
           )}
         </div>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
-import { Sparkles, Calendar, Wallet, Check, AlertCircle } from 'lucide-react';
+import { Sparkles, Calendar, DollarSign, Wallet } from 'lucide-react';
 
 export function SalaryModal() {
   const {
@@ -12,6 +12,7 @@ export function SalaryModal() {
     saveSalaryConfig,
     accounts,
     formatMoney,
+    t,
   } = useFinance();
 
   const [amount, setAmount] = useState('');
@@ -36,7 +37,7 @@ export function SalaryModal() {
     e.preventDefault();
     const parsedAmount = parseFloat(amount.replace(',', '.'));
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      alert('Lütfen geçerli bir maaş tutarı giriniz.');
+      alert(t('transfer.validAmountError') || 'Lütfen geçerli bir maaş tutarı giriniz.');
       return;
     }
 
@@ -56,15 +57,15 @@ export function SalaryModal() {
     <Modal
       isOpen={isSalaryModalOpen}
       onClose={closeSalaryModal}
-      title="Maaş Günü & Otomatik Gelir Ayarı"
-      subtitle="Her ay düzenli yatan maaşınızı ve otomatik hesap aktarımını belirleyin"
+      title={t('salaryModal.title')}
+      subtitle={t('salaryModal.subtitle')}
       maxWidth="max-w-md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Salary Amount */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Aylık Net Maaş Tutarı (TL)
+            {t('salaryModal.amountLabel')}
           </label>
           <div className="relative">
             <input
@@ -77,9 +78,6 @@ export function SalaryModal() {
               autoFocus
               className="w-full text-2xl font-black px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all pr-12"
             />
-            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
-              ₺
-            </span>
           </div>
         </div>
 
@@ -87,10 +85,10 @@ export function SalaryModal() {
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Maaş Günü (Her Ayın)
+              {t('salaryModal.paydayLabel')}
             </label>
             <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              Her ayın {dayOfMonth}. günü
+              {t('salaryModal.paydayEveryMonth', { day: dayOfMonth })}
             </span>
           </div>
 
@@ -103,7 +101,7 @@ export function SalaryModal() {
               onChange={(e) => setDayOfMonth(Math.max(1, Math.min(31, parseInt(e.target.value) || 1)))}
               className="w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-center font-black text-sm text-slate-800 focus:outline-none focus:border-emerald-500"
             />
-            <span className="text-xs text-slate-500">veya hızlıca seçin:</span>
+            <span className="text-xs text-slate-500">{t('salaryModal.quickSelect')}</span>
           </div>
 
           {/* Quick day buttons */}
@@ -119,7 +117,7 @@ export function SalaryModal() {
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
                 }`}
               >
-                {d}. Gün
+                {d}
               </button>
             ))}
           </div>
@@ -128,7 +126,7 @@ export function SalaryModal() {
         {/* Target Bank Account */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Maaşın Yatacağı Hesap / Banka
+            {t('salaryModal.targetAccount')}
           </label>
           <select
             value={accountId}
@@ -142,20 +140,20 @@ export function SalaryModal() {
             ))}
           </select>
           <p className="text-[11px] text-slate-400 mt-1">
-            Maaş günü geldiğinde seçilen bu hesabın bakiyesi otomatik olarak artırılacaktır.
+            {t('salaryModal.targetAccountHint')}
           </p>
         </div>
 
         {/* Title / Description */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            İşlem Başlığı (Opsiyonel)
+            {t('salaryModal.titleOptional')}
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Aylık Maaş Ödemesi"
+            placeholder={t('salaryModal.titlePlaceholder')}
             className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
           />
         </div>
@@ -179,15 +177,15 @@ export function SalaryModal() {
             </div>
             <div>
               <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                <span>Günü Geldiğinde Otomatik Ekle</span>
+                <span>{t('salaryModal.autoProcessTitle')}</span>
                 {autoProcess && (
                   <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full font-extrabold uppercase">
-                    Aktif
+                    {t('salaryModal.activeBadge')}
                   </span>
                 )}
               </div>
               <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                Maaş gününüz geldiğinde uygulama geliri otomatik işler ve hesabınıza yansıtır.
+                {t('salaryModal.autoProcessDesc')}
               </p>
             </div>
           </div>
@@ -208,10 +206,10 @@ export function SalaryModal() {
         {/* Actions */}
         <div className="grid grid-cols-2 gap-3 pt-2">
           <Button type="button" variant="secondary" onClick={closeSalaryModal}>
-            Vazgeç
+            {t('common.cancel')}
           </Button>
           <Button type="submit" variant="primary" className="font-bold">
-            Maaş Gününü Kaydet
+            {t('salaryModal.saveBtn')}
           </Button>
         </div>
       </form>

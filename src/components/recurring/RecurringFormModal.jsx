@@ -14,6 +14,8 @@ export function RecurringFormModal() {
     categories,
     accounts,
     formatMoney,
+    t,
+    getCategoryName,
   } = useFinance();
 
   const [title, setTitle] = useState('');
@@ -50,7 +52,7 @@ export function RecurringFormModal() {
     e.preventDefault();
     const parsedAmount = parseFloat(amount.replace(',', '.'));
     if (!title.trim() || isNaN(parsedAmount) || parsedAmount <= 0) {
-      alert('Lütfen geçerli bir başlık ve tutar giriniz.');
+      alert(t('transfer.validAmountError') || 'Lütfen geçerli bir başlık ve tutar giriniz.');
       return;
     }
 
@@ -81,8 +83,8 @@ export function RecurringFormModal() {
     <Modal
       isOpen={isRecurringModalOpen}
       onClose={closeRecurringModal}
-      title={editingRecurring ? 'Aboneliği Düzenle' : 'Yeni Düzenli Ödeme / Abonelik'}
-      subtitle="Kira, fatura, Netflix gibi periyodik ödemelerinizi otomatikleştirin"
+      title={editingRecurring ? t('recurring.editRecurring') : t('recurring.newRecurring')}
+      subtitle={t('recurring.subtitle')}
       maxWidth="max-w-md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,7 +100,7 @@ export function RecurringFormModal() {
             }`}
           >
             <ArrowDownLeft className="w-3.5 h-3.5" />
-            <span>Düzenli Gider / Abonelik</span>
+            <span>{t('recurring.regularExpense')}</span>
           </button>
           <button
             type="button"
@@ -110,18 +112,18 @@ export function RecurringFormModal() {
             }`}
           >
             <ArrowUpRight className="w-3.5 h-3.5" />
-            <span>Düzenli Gelir</span>
+            <span>{t('recurring.regularIncome')}</span>
           </button>
         </div>
 
         {/* Title */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Ödeme Başlığı
+            {t('transactions.title')}
           </label>
           <input
             type="text"
-            placeholder={type === 'expense' ? 'Örn: Netflix & Spotify, Ev Kirası, Fiber İnternet' : 'Örn: Düzenli Kira Geliri, Burs, Danışmanlık'}
+            placeholder={type === 'expense' ? 'Netflix & Spotify, Kira...' : 'Kira Geliri, Burs...'}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -132,7 +134,7 @@ export function RecurringFormModal() {
         {/* Amount */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Aylık Tutar (TL)
+            {t('transactions.amount')} (TL)
           </label>
           <div className="relative">
             <input
@@ -144,9 +146,6 @@ export function RecurringFormModal() {
               required
               className="w-full text-2xl font-black px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white pr-10"
             />
-            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
-              ₺
-            </span>
           </div>
         </div>
 
@@ -154,10 +153,10 @@ export function RecurringFormModal() {
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Ödeme Günü (Her Ayın)
+              {t('recurring.monthlyDay', { day: dayOfMonth })}
             </label>
             <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              Her ayın {dayOfMonth}. günü
+              {t('recurring.monthlyDay', { day: dayOfMonth })}
             </span>
           </div>
 
@@ -193,7 +192,7 @@ export function RecurringFormModal() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              Kategori
+              {t('budget.category')}
             </label>
             <select
               value={categoryId}
@@ -202,7 +201,7 @@ export function RecurringFormModal() {
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name}
+                  {getCategoryName(c.id, c.name)}
                 </option>
               ))}
             </select>
@@ -210,7 +209,7 @@ export function RecurringFormModal() {
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              İlişkili Hesap
+              {t('debts.linkedAccount')}
             </label>
             <select
               value={accountId}
@@ -245,17 +244,15 @@ export function RecurringFormModal() {
             </div>
             <div>
               <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                <span>Günü Geldiğinde Otomatik İşle</span>
+                <span>{t('recurring.autoProcessOn')}</span>
                 {autoProcess && (
                   <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full font-extrabold uppercase">
-                    Aktif
+                    {t('salaryModal.activeBadge')}
                   </span>
                 )}
               </div>
               <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                {type === 'expense'
-                  ? 'Günü geldiğinde otomatik gider oluşturur ve hesaptan düşer.'
-                  : 'Günü geldiğinde otomatik gelir oluşturur ve hesaba ekler.'}
+                {t('salaryModal.autoProcessDesc')}
               </p>
             </div>
           </div>
@@ -276,10 +273,10 @@ export function RecurringFormModal() {
         {/* Actions */}
         <div className="grid grid-cols-2 gap-3 pt-2">
           <Button type="button" variant="secondary" onClick={closeRecurringModal}>
-            Vazgeç
+            {t('common.cancel')}
           </Button>
           <Button type="submit" variant="primary" className="font-bold">
-            {editingRecurring ? 'Güncelle' : 'Kaydet'}
+            {t('common.save')}
           </Button>
         </div>
       </form>

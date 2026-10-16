@@ -23,8 +23,11 @@ import {
   Loader2,
   FileText,
   CreditCard,
-  Wallet
+  Wallet,
+  Sparkles
 } from 'lucide-react';
+
+import { analyzeReceiptWithGemini } from '../../services/receiptVision.js';
 
 export function TransactionFormModal() {
   const {
@@ -38,6 +41,11 @@ export function TransactionFormModal() {
     accounts,
     settings,
     openReceiptViewer,
+    getCreditCardDetails,
+    t,
+    getCategoryName,
+    getTransactionTypeName,
+    language,
   } = useFinance();
 
   // Form states
@@ -59,19 +67,89 @@ export function TransactionFormModal() {
   // Receipt photos state
   const [receiptImages, setReceiptImages] = useState([]);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const amountInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
 
+  const handleAnalyzeReceipt = async (imgUrl) => {
+    if (!settings.geminiApiKey) {
+      alert("Lütfen Ayarlar sayfasından Gemini API anahtarınızı ekleyin.");
+      return;
+    }
+    
+    setIsAnalyzing(true);
+    try {
+      const catString = categories.map(c => `${c.id} (${c.name})`).join(', ');
+      const result = await analyzeReceiptWithGemini(imgUrl, settings.geminiApiKey, catString);
+      
+      if (result.totalAmount) {
+        setAmount(String(result.totalAmount));
+      }
+      if (result.merchant || (result.items && result.items.length > 0)) {
+        let desc = result.merchant || '';
+        if (result.items && result.items.length > 0) {
+          desc += desc ? ': ' + result.items[0].name : result.items[0].name;
+          if (result.items.length > 1) {
+            desc += ' + ' + (result.items.length - 1) + ' ürün';
+          }
+        }
+        setDescription(desc);
+      }
+      if (result.date) {
+        setDate(result.date);
+      }
+      if (result.note) {
+        setNote(result.note);
+      }
+      
+      // Auto-categorize based on AI result
+      if (result.category) {
+        const aiCat = String(result.category).toLowerCase();
+        const matched = categories.find(c => 
+          c.id.toLowerCase() === aiCat || 
+          c.name.toLowerCase() === aiCat ||
+          aiCat.includes(c.id.toLowerCase()) ||
+          aiCat.includes(c.name.toLowerCase())
+        );
+        if (matched) {
+          setCategoryId(matched.id);
+        } else {
+          // Fallback if AI hallucinates a non-existent category
+          const fallbackMatches = {
+            'market': 'food', 'restoran': 'food', 'gıda': 'food',
+            'giyim': 'shopping', 'kıyafet': 'shopping',
+            'elektronik': 'electronics', 'fatura': 'bills',
+            'akaryakıt': 'transport', 'benzin': 'transport', 'sağlık': 'health'
+          };
+          for (const [key, val] of Object.entries(fallbackMatches)) {
+            if (aiCat.includes(key)) {
+              setCategoryId(val);
+              break;
+            }
+          }
+        }
+      }
+      
+      // Since it's a receipt, it's most likely an expense
+      setType(TRANSACTION_TYPES.EXPENSE);
+      
+    } catch (err) {
+      alert("Fiş analizi başarısız oldu: " + err.message);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   // Type buttons configuration with icons
   const typeButtons = [
-    { type: TRANSACTION_TYPES.EXPENSE, label: 'Gider', icon: ArrowDownLeft, color: 'hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-rose-700 bg-rose-50/80 border-rose-300' },
-    { type: TRANSACTION_TYPES.INCOME, label: 'Gelir', icon: ArrowUpRight, color: 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 text-emerald-700 bg-emerald-50/80 border-emerald-300' },
-    { type: TRANSACTION_TYPES.PURCHASE, label: 'Alış', icon: ShoppingBag, color: 'hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-blue-700 bg-blue-50/80 border-blue-300' },
-    { type: TRANSACTION_TYPES.SALE, label: 'Satış', icon: Coins, color: 'hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 text-amber-700 bg-amber-50/80 border-amber-300' },
-    { type: TRANSACTION_TYPES.INVESTMENT, label: 'Yatırım', icon: TrendingUp, color: 'hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 text-purple-700 bg-purple-50/80 border-purple-300' },
-    { type: TRANSACTION_TYPES.OTHER, label: 'Diğer', icon: MoreHorizontal, color: 'hover:bg-slate-100 hover:text-slate-800 hover:border-slate-300 text-slate-800 bg-slate-100 border-slate-300' },
+    { type: TRANSACTION_TYPES.EXPENSE, label: getTransactionTypeName(TRANSACTION_TYPES.EXPENSE, 'Gider'), icon: ArrowDownLeft, color: 'hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-rose-700 bg-rose-50/80 border-rose-300' },
+    { type: TRANSACTION_TYPES.INCOME, label: getTransactionTypeName(TRANSACTION_TYPES.INCOME, 'Gelir'), icon: ArrowUpRight, color: 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 text-emerald-700 bg-emerald-50/80 border-emerald-300' },
+    { type: TRANSACTION_TYPES.PURCHASE, label: getTransactionTypeName(TRANSACTION_TYPES.PURCHASE, 'Alış'), icon: ShoppingBag, color: 'hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-blue-700 bg-blue-50/80 border-blue-300' },
+    { type: TRANSACTION_TYPES.SALE, label: getTransactionTypeName(TRANSACTION_TYPES.SALE, 'Satış'), icon: Coins, color: 'hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 text-amber-700 bg-amber-50/80 border-amber-300' },
+    { type: TRANSACTION_TYPES.INVESTMENT, label: getTransactionTypeName(TRANSACTION_TYPES.INVESTMENT, 'Yatırım'), icon: TrendingUp, color: 'hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 text-purple-700 bg-purple-50/80 border-purple-300' },
+    { type: TRANSACTION_TYPES.OTHER, label: getTransactionTypeName(TRANSACTION_TYPES.OTHER, 'Diğer'), icon: MoreHorizontal, color: 'hover:bg-slate-100 hover:text-slate-800 hover:border-slate-300 text-slate-800 bg-slate-100 border-slate-300' },
   ];
 
   // Populate or reset form when modal opens
@@ -121,6 +199,12 @@ export function TransactionFormModal() {
           amountInputRef.current.focus();
         }
       }, 100);
+
+      if (editingTransaction?.autoAnalyzeOnMount && editingTransaction.receiptImages?.length > 0) {
+        // Clear the flag to prevent infinite loops if state changes
+        editingTransaction.autoAnalyzeOnMount = false;
+        handleAnalyzeReceipt(editingTransaction.receiptImages[0].url);
+      }
     }
   }, [isAddModalOpen, editingTransaction, categories, accounts, settings]);
 
@@ -250,8 +334,8 @@ export function TransactionFormModal() {
     <Modal
       isOpen={isAddModalOpen}
       onClose={closeAddTransactionModal}
-      title={editingTransaction?.id ? 'İşlemi Düzenle' : 'Yeni İşlem Ekle'}
-      subtitle="Gelir, harcama, fiş veya varlık hareketinizi kaydedin"
+      title={editingTransaction?.id ? t('transactions.editTransaction') : t('transactions.newTransaction')}
+      subtitle={t('transactions.formSubtitle', 'Gelir, harcama, fiş veya varlık hareketinizi kaydedin')}
       maxWidth="max-w-lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -259,7 +343,7 @@ export function TransactionFormModal() {
         <div className="flex items-center justify-between bg-emerald-50/80 p-2.5 rounded-2xl border border-emerald-200/80">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-emerald-900">
-              🎙️ Sesinle Söyle, Doldursun
+              🎙️ {t('transactions.voiceInputTip', 'Sesinle Söyle, Doldursun')}
             </span>
           </div>
           <VoiceInputButton onParsed={handleVoiceParsed} categories={categories} />
@@ -268,7 +352,7 @@ export function TransactionFormModal() {
         {/* Transaction Type Selector Pills */}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
-            İşlem Türü
+            {t('transactions.type', 'İşlem Türü')}
           </label>
           <div className="grid grid-cols-3 gap-2">
             {typeButtons.map((btn) => {
@@ -296,7 +380,7 @@ export function TransactionFormModal() {
         {/* Primary Amount Input */}
         <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-            Tutar ({settings.currency === 'USD' ? '$' : settings.currency === 'EUR' ? '€' : settings.currency === 'GBP' ? '£' : '₺'})
+            {t('common.amount')} ({settings.currency === 'USD' ? '$' : settings.currency === 'EUR' ? '€' : settings.currency === 'GBP' ? '£' : '₺'})
           </label>
           <div className="relative flex items-center">
             <input
@@ -304,7 +388,7 @@ export function TransactionFormModal() {
               type="number"
               step="any"
               inputMode="decimal"
-              placeholder="0,00"
+              placeholder="0.00"
               value={amount}
               onChange={(e) => handleAmountChange(e.target.value)}
               required
@@ -313,7 +397,7 @@ export function TransactionFormModal() {
           </div>
           {/* Quick preset buttons */}
           <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-200/60 overflow-x-auto pb-1">
-            <span className="text-[11px] text-slate-400 font-medium shrink-0">Hızlı:</span>
+            <span className="text-[11px] text-slate-400 font-medium shrink-0">{t('transactions.quickPreset', 'Hızlı')}:</span>
             {[50, 100, 250, 500, 1000, 5000].map((preset) => (
               <button
                 type="button"
@@ -335,25 +419,45 @@ export function TransactionFormModal() {
           {/* Account / Wallet */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              Hesap / Cüzdan
+              {t('common.account')}
             </label>
             <select
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
             >
-              {accounts.map((acc) => (
-                <option key={acc.id} value={acc.id}>
-                  {acc.name} ({acc.balance.toLocaleString('tr-TR')} ₺)
-                </option>
-              ))}
+              {accounts.map((acc) => {
+                let label = `${acc.name} (${acc.balance.toLocaleString('tr-TR')} ₺)`;
+                if (acc.type === 'credit_card') {
+                  const details = getCreditCardDetails ? getCreditCardDetails(acc) : null;
+                  const bNum = Number(acc.balance) || 0;
+                  const prefix = details?.isMainCard
+                    ? '[👑 Ana Kart] '
+                    : details?.isSubCard
+                    ? '[🔗 Ek Kart] '
+                    : '';
+                  const rem = details ? details.availableLimit : 0;
+
+                  if (bNum > 0) {
+                    label = `${prefix}${acc.name} (${language === 'en' ? 'Excess: +' : 'Artı Bakiye: +'}${bNum.toLocaleString('tr-TR')} ₺ | ${language === 'en' ? 'Avail: ' : 'Kalan: '}${rem.toLocaleString('tr-TR')} ₺)`;
+                  } else {
+                    const debt = Math.abs(bNum);
+                    label = `${prefix}${acc.name} (${language === 'en' ? 'Debt: ' : 'Borç: '}${debt.toLocaleString('tr-TR')} ₺ | ${language === 'en' ? 'Avail: ' : 'Kalan: '}${rem.toLocaleString('tr-TR')} ₺)`;
+                  }
+                }
+                return (
+                  <option key={acc.id} value={acc.id}>
+                    {label}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
           {/* Category */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              Kategori
+              {t('common.category')}
             </label>
             <select
               value={categoryId}
@@ -362,7 +466,7 @@ export function TransactionFormModal() {
             >
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
-                  {cat.name}
+                  {getCategoryName(cat.id, cat.name)}
                 </option>
               ))}
             </select>
@@ -373,7 +477,7 @@ export function TransactionFormModal() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              Tarih
+              {t('common.date')}
             </label>
             <input
               type="date"
@@ -386,11 +490,11 @@ export function TransactionFormModal() {
 
           <div className="sm:col-span-2">
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              Açıklama / Başlık
+              {t('common.description')}
             </label>
             <input
               type="text"
-              placeholder="Örn: Market alışverişi, Maaş, Gram Altın..."
+              placeholder={t('transactions.descriptionPlaceholder', 'Örn: Market alışverişi, Maaş, Gram Altın...')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"
@@ -404,12 +508,12 @@ export function TransactionFormModal() {
             <div className="flex items-center gap-2">
               <Camera className="w-4 h-4 text-emerald-700" />
               <span className="text-xs font-bold text-emerald-900">
-                Fiş / Fatura Fotoğrafı
+                {t('transactions.receiptPhoto', 'Fiş / Fatura Fotoğrafı')}
               </span>
             </div>
             {receiptImages.length > 0 && (
               <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                {receiptImages.length} Fiş Eklendi
+                {receiptImages.length} {language === 'en' ? 'Receipts Attached' : 'Fiş Eklendi'}
               </span>
             )}
           </div>
@@ -442,7 +546,7 @@ export function TransactionFormModal() {
               className="flex-1 bg-white hover:bg-emerald-50 text-emerald-700 border-emerald-200 text-xs font-semibold"
               disabled={isUploadingImage}
             >
-              Fotoğraf Çek
+              {t('transactions.takePhoto', 'Fotoğraf Çek')}
             </Button>
 
             <Button
@@ -454,43 +558,63 @@ export function TransactionFormModal() {
               className="flex-1 bg-white hover:bg-emerald-50 text-emerald-700 border-emerald-200 text-xs font-semibold"
               disabled={isUploadingImage}
             >
-              Galeriden Seç
+              {t('transactions.chooseFromGallery', 'Galeriden Seç')}
             </Button>
           </div>
 
           {isUploadingImage && (
             <div className="flex items-center justify-center gap-2 py-2 text-xs text-emerald-700 font-medium">
               <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
-              <span>Görsel optimize ediliyor...</span>
+              <span>{language === 'en' ? 'Optimizing image...' : 'Görsel optimize ediliyor...'}</span>
+            </div>
+          )}
+
+          {isAnalyzing && (
+            <div className="flex items-center justify-center gap-2 py-2 text-xs text-indigo-700 font-medium bg-indigo-50 rounded-xl border border-indigo-200">
+              <Sparkles className="w-4 h-4 animate-pulse text-indigo-600" />
+              <span>{language === 'en' ? 'AI is analyzing receipt, please wait...' : 'Yapay Zeka fişi inceliyor, lütfen bekleyin...'}</span>
             </div>
           )}
 
           {receiptImages.length > 0 && (
-            <div className="grid grid-cols-4 gap-2 pt-1">
+            <div className="grid grid-cols-2 gap-2 pt-1">
               {receiptImages.map((img) => (
                 <div
                   key={img.id}
-                  className="relative group aspect-square rounded-xl overflow-hidden border border-emerald-300/80 bg-slate-100 shadow-sm"
+                  className="relative group rounded-xl overflow-hidden border border-emerald-300/80 bg-slate-100 shadow-sm"
                 >
-                  <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                  <div className="aspect-square">
+                    <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
+                  </div>
+                  
+                  <div className="absolute top-1 right-1 flex gap-1 z-10">
                     <button
                       type="button"
                       onClick={() => openReceiptViewer({ ...img, description })}
-                      className="p-1 bg-white/90 text-slate-800 rounded hover:bg-white"
-                      title="Büyüt"
+                      className="p-1.5 bg-white/90 shadow-sm text-slate-800 rounded-lg hover:bg-white"
+                      title={language === 'en' ? 'Zoom' : 'Büyüt'}
                     >
                       <Eye className="w-3.5 h-3.5" />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(img.id)}
-                      className="p-1 bg-rose-600 text-white rounded hover:bg-rose-700"
-                      title="Sil"
+                      className="p-1.5 bg-rose-600 shadow-sm text-white rounded-lg hover:bg-rose-700"
+                      title={t('common.delete')}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
+                  
+                  <button
+                    type="button"
+                    disabled={isAnalyzing}
+                    onClick={() => handleAnalyzeReceipt(img.url)}
+                    className="absolute bottom-0 inset-x-0 w-full py-1.5 bg-indigo-600/90 hover:bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>{t('transactions.aiFill', 'Yapay Zeka ile Doldur')}</span>
+                  </button>
                 </div>
               ))}
             </div>
@@ -505,18 +629,18 @@ export function TransactionFormModal() {
             className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1.5 py-1"
           >
             <Calculator className="w-3.5 h-3.5" />
-            <span>{showAssetFields ? 'Varlık / Miktar Alanlarını Gizle' : '+ Varlık Adı, Miktar ve Birim Fiyat Ekle'}</span>
+            <span>{showAssetFields ? (language === 'en' ? 'Hide Asset / Quantity Fields' : 'Varlık / Miktar Alanlarını Gizle') : (language === 'en' ? '+ Add Asset Name, Quantity & Unit Price' : '+ Varlık Adı, Miktar ve Birim Fiyat Ekle')}</span>
           </button>
 
           {showAssetFields && (
             <div className="mt-2 p-3 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2.5 animate-slide-up">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                  Varlık / Kalem Adı
+                  {language === 'en' ? 'Asset / Item Name' : 'Varlık / Kalem Adı'}
                 </label>
                 <input
                   type="text"
-                  placeholder="Örn: Gram Altın, THYAO, USD, MacBook"
+                  placeholder={language === 'en' ? 'e.g. Gold Gram, Apple Stock, USD, MacBook' : 'Örn: Gram Altın, THYAO, USD, MacBook'}
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
@@ -526,12 +650,12 @@ export function TransactionFormModal() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                    Miktar / Adet
+                    {language === 'en' ? 'Quantity / Amount' : 'Miktar / Adet'}
                   </label>
                   <input
                     type="number"
                     step="any"
-                    placeholder="Örn: 5"
+                    placeholder="5"
                     value={quantity}
                     onChange={(e) => handleQuantityChange(e.target.value)}
                     className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
@@ -539,12 +663,12 @@ export function TransactionFormModal() {
                 </div>
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                    Birim Fiyat
+                    {language === 'en' ? 'Unit Price' : 'Birim Fiyat'}
                   </label>
                   <input
                     type="number"
                     step="any"
-                    placeholder="Örn: 4500"
+                    placeholder="4500"
                     value={unitPrice}
                     onChange={(e) => handleUnitPriceChange(e.target.value)}
                     className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
@@ -561,7 +685,7 @@ export function TransactionFormModal() {
                     className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300"
                   />
                   <span className="text-xs text-slate-700 font-medium">
-                    Bu kalemi Yatırım Portföyüme de ekle
+                    {language === 'en' ? 'Also add this item to my Investment Portfolio' : 'Bu kalemi Yatırım Portföyüme de ekle'}
                   </span>
                 </label>
               )}
@@ -571,12 +695,12 @@ export function TransactionFormModal() {
 
         {/* Optional Note */}
         <div>
-          <input
-            type="text"
-            placeholder="Ek notlar (isteğe bağlı)..."
+          <textarea
+            rows="3"
+            placeholder={t('transactions.notePlaceholder', 'Ek notlar, ürün detayları vb. (isteğe bağlı)...')}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 resize-y"
           />
         </div>
 
@@ -589,7 +713,7 @@ export function TransactionFormModal() {
             className="flex-1"
             size="md"
           >
-            Vazgeç
+            {t('common.cancel')}
           </Button>
           <Button
             type="submit"
@@ -597,7 +721,7 @@ export function TransactionFormModal() {
             className="flex-1 font-bold"
             size="md"
           >
-            {editingTransaction?.id ? 'Güncelle' : 'Kaydet'}
+            {editingTransaction?.id ? t('common.save') : t('common.save')}
           </Button>
         </div>
       </form>

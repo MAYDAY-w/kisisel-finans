@@ -2,11 +2,151 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   DYNAMIC COLOR THEMES & CSS VARIABLES
+   ========================================================================== */
+
+/* 1. Emerald (Default Theme) */
+:root, [data-theme="emerald"] {
+  --primary-50-rgb: 236 253 245;
+  --primary-100-rgb: 209 250 229;
+  --primary-200-rgb: 167 243 208;
+  --primary-300-rgb: 110 231 183;
+  --primary-400-rgb: 52 211 153;
+  --primary-500-rgb: 16 185 129;
+  --primary-600-rgb: 5 150 105;
+  --primary-700-rgb: 4 120 87;
+  --primary-800-rgb: 6 95 70;
+  --primary-900-rgb: 6 78 59;
+  --primary-950-rgb: 2 44 34;
+  --primary-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #0d9488 100%);
+  --primary-glow: rgba(16, 185, 129, 0.35);
+  --color-primary-hex: #10b981;
+}
+
+/* 2. Ocean Blue Theme */
+[data-theme="blue"] {
+  --primary-50-rgb: 239 246 255;
+  --primary-100-rgb: 219 234 254;
+  --primary-200-rgb: 191 219 254;
+  --primary-300-rgb: 147 197 253;
+  --primary-400-rgb: 96 165 250;
+  --primary-500-rgb: 59 130 246;
+  --primary-600-rgb: 37 99 235;
+  --primary-700-rgb: 29 78 216;
+  --primary-800-rgb: 30 64 175;
+  --primary-900-rgb: 30 58 138;
+  --primary-950-rgb: 23 37 84;
+  --primary-gradient: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #06b6d4 100%);
+  --primary-glow: rgba(59, 130, 246, 0.35);
+  --color-primary-hex: #3b82f6;
+}
+
+/* 3. Royal Purple Theme */
+[data-theme="purple"] {
+  --primary-50-rgb: 250 245 255;
+  --primary-100-rgb: 243 232 255;
+  --primary-200-rgb: 233 213 255;
+  --primary-300-rgb: 216 180 254;
+  --primary-400-rgb: 192 132 252;
+  --primary-500-rgb: 168 85 247;
+  --primary-600-rgb: 147 51 234;
+  --primary-700-rgb: 126 34 206;
+  --primary-800-rgb: 107 33 168;
+  --primary-900-rgb: 88 28 135;
+  --primary-950-rgb: 59 7 100;
+  --primary-gradient: linear-gradient(135deg, #7e22ce 0%, #9333ea 50%, #c084fc 100%);
+  --primary-glow: rgba(168, 85, 247, 0.35);
+  --color-primary-hex: #a855f7;
+}
+
+/* 4. Sunset Amber Theme */
+[data-theme="amber"] {
+  --primary-50-rgb: 255 251 235;
+  --primary-100-rgb: 254 243 199;
+  --primary-200-rgb: 253 230 138;
+  --primary-300-rgb: 252 211 77;
+  --primary-400-rgb: 251 191 36;
+  --primary-500-rgb: 245 158 11;
+  --primary-600-rgb: 217 119 6;
+  --primary-700-rgb: 180 83 9;
+  --primary-800-rgb: 146 64 14;
+  --primary-900-rgb: 120 53 15;
+  --primary-950-rgb: 69 26 3;
+  --primary-gradient: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+  --primary-glow: rgba(245, 158, 11, 0.35);
+  --color-primary-hex: #f59e0b;
+}
+
+/* 5. Ruby Rose Theme */
+[data-theme="rose"] {
+  --primary-50-rgb: 255 241 242;
+  --primary-100-rgb: 255 228 230;
+  --primary-200-rgb: 254 205 211;
+  --primary-300-rgb: 253 164 175;
+  --primary-400-rgb: 251 113 133;
+  --primary-500-rgb: 244 63 94;
+  --primary-600-rgb: 225 29 72;
+  --primary-700-rgb: 190 18 60;
+  --primary-800-rgb: 159 18 57;
+  --primary-900-rgb: 136 19 55;
+  --primary-950-rgb: 76 5 25;
+  --primary-gradient: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%);
+  --primary-glow: rgba(244, 63, 94, 0.35);
+  --color-primary-hex: #f43f5e;
+}
+
+/* 6. Cyber Cyan Theme */
+[data-theme="cyan"] {
+  --primary-50-rgb: 236 254 255;
+  --primary-100-rgb: 207 250 254;
+  --primary-200-rgb: 165 243 252;
+  --primary-300-rgb: 103 232 249;
+  --primary-400-rgb: 34 211 238;
+  --primary-500-rgb: 6 182 212;
+  --primary-600-rgb: 8 145 178;
+  --primary-700-rgb: 14 116 144;
+  --primary-800-rgb: 21 94 117;
+  --primary-900-rgb: 22 78 99;
+  --primary-950-rgb: 8 51 68;
+  --primary-gradient: linear-gradient(135deg, #0e7490 0%, #0891b2 50%, #06b6d4 100%);
+  --primary-glow: rgba(6, 182, 212, 0.35);
+  --color-primary-hex: #06b6d4;
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans;
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased font-sans transition-colors duration-200;
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* ==========================================================================
+   DARK MODE FORM ELEMENTS & CONTRAST
+   ========================================================================== */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]):not([type="range"]),
+.dark select,
+.dark textarea {
+  background-color: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: rgb(var(--primary-500-rgb)) !important;
+  outline: none !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b;
+}
+
+.dark select option {
+  background-color: #0f172a;
+  color: #f8fafc;
 }
 
 /* Custom modern scrollbar */
@@ -28,6 +168,23 @@
   background: #94a3b8;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Theme Utilities */
+.theme-gradient {
+  background: var(--primary-gradient);
+}
+
+.theme-glow {
+  box-shadow: 0 10px 25px -5px var(--primary-glow);
+}
+
 /* Utility animations */
 @keyframes slideUp {
   from {
@@ -42,4 +199,17 @@
 
 .animate-slide-up {
   animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 12s linear infinite;
 }

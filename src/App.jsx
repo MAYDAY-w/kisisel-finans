@@ -1,4 +1,5 @@
 import React from 'react';
+import { ThemeProvider } from './context/ThemeContext';
 import { FinanceProvider, useFinance } from './context/FinanceContext';
 import { Header } from './components/layout/Header';
 import { BottomNav } from './components/layout/BottomNav';
@@ -18,9 +19,11 @@ import { SettingsView } from './components/settings/SettingsView';
 import { TransactionFormModal } from './components/transactions/TransactionFormModal';
 import { InvestmentFormModal } from './components/investments/InvestmentFormModal';
 import { UpdatePriceModal } from './components/investments/UpdatePriceModal';
+import { AddInvestmentBalanceModal } from './components/investments/AddInvestmentBalanceModal';
 import { DailyDetailModal } from './components/daily/DailyDetailModal';
 import { ReceiptViewerModal } from './components/common/ReceiptViewerModal';
 import { AccountFormModal } from './components/accounts/AccountFormModal';
+import { AccountDetailModal } from './components/accounts/AccountDetailModal';
 import { TransferModal } from './components/accounts/TransferModal';
 import { BudgetFormModal } from './components/budget/BudgetFormModal';
 import { DebtFormModal } from './components/debts/DebtFormModal';
@@ -28,12 +31,13 @@ import { RecurringFormModal } from './components/recurring/RecurringFormModal';
 import { SalaryModal } from './components/recurring/SalaryModal';
 import { AiAdvisorModal } from './components/ai/AiAdvisorModal';
 import { InstallAppModal } from './components/layout/InstallAppModal';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 function MainLayout() {
   const { activeTab, viewingReceipt, closeReceiptViewer } = useFinance();
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200 selection:bg-primary-100 selection:text-primary-900">
       {/* Top Header */}
       <Header />
 
@@ -42,15 +46,17 @@ function MainLayout() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-5 sm:pt-6">
-        {activeTab === 'dashboard' && <DashboardView />}
-        {activeTab === 'daily' && <DailyView />}
-        {activeTab === 'accounts' && <AccountList />}
-        {activeTab === 'budget' && <BudgetView />}
-        {activeTab === 'transactions' && <TransactionList />}
-        {activeTab === 'investments' && <InvestmentList />}
-        {activeTab === 'debts' && <DebtView />}
-        {activeTab === 'recurring' && <RecurringView />}
-        {activeTab === 'settings' && <SettingsView />}
+        <ErrorBoundary>
+          {activeTab === 'dashboard' && <DashboardView />}
+          {activeTab === 'daily' && <DailyView />}
+          {activeTab === 'accounts' && <AccountList />}
+          {activeTab === 'budget' && <BudgetView />}
+          {activeTab === 'transactions' && <TransactionList />}
+          {activeTab === 'investments' && <InvestmentList />}
+          {activeTab === 'debts' && <DebtView />}
+          {activeTab === 'recurring' && <RecurringView />}
+          {activeTab === 'settings' && <SettingsView />}
+        </ErrorBoundary>
       </main>
 
       {/* Floating Action Button for Quick Add */}
@@ -63,6 +69,7 @@ function MainLayout() {
       <TransactionFormModal />
       <InvestmentFormModal />
       <UpdatePriceModal />
+      <AddInvestmentBalanceModal />
       <DailyDetailModal />
       <ReceiptViewerModal
         isOpen={Boolean(viewingReceipt)}
@@ -70,6 +77,7 @@ function MainLayout() {
         receipt={viewingReceipt}
       />
       <AccountFormModal />
+      <AccountDetailModal />
       <TransferModal />
       <BudgetFormModal />
       <DebtFormModal />
@@ -81,10 +89,47 @@ function MainLayout() {
   );
 }
 
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthView } from './components/auth/AuthView';
+
+function AuthWrapper({ children }) {
+  const { user, loading } = useAuth();
+  const [skipAuth, setSkipAuth] = React.useState(() => localStorage.getItem('finans_skip_auth') === 'true');
+
+  const handleSkip = () => {
+    localStorage.setItem('finans_skip_auth', 'true');
+    setSkipAuth(true);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!user && !skipAuth) {
+    return <AuthView onContinueOffline={handleSkip} />;
+  }
+
+  return children;
+}
+
+import { LanguageProvider } from './context/LanguageContext';
+
 export default function App() {
   return (
-    <FinanceProvider>
-      <MainLayout />
-    </FinanceProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <FinanceProvider>
+            <AuthWrapper>
+              <MainLayout />
+            </AuthWrapper>
+          </FinanceProvider>
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }

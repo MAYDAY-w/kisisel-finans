@@ -13,6 +13,8 @@ import {
   Bitcoin,
   Banknote,
   PieChart,
+  Landmark,
+  Clock,
   ShieldCheck
 } from 'lucide-react';
 
@@ -22,16 +24,21 @@ export function InvestmentList() {
     financialSummary,
     formatMoney,
     openAddInvestmentModal,
+    t,
+    getAssetTypeName,
+    language,
   } = useFinance();
 
   const [selectedAssetType, setSelectedAssetType] = useState('all');
 
   const assetTypes = [
-    { id: 'all', label: 'Tümü', icon: PieChart },
-    { id: 'gold', label: 'Altın', icon: Coins },
-    { id: 'stocks', label: 'Borsa & Hisse', icon: LineChart },
-    { id: 'crypto', label: 'Kripto', icon: Bitcoin },
-    { id: 'currency', label: 'Döviz', icon: Banknote },
+    { id: 'all', label: t('common.all', 'Tümü'), icon: PieChart },
+    { id: 'gold', label: getAssetTypeName('gold', 'Altın'), icon: Coins },
+    { id: 'stocks', label: getAssetTypeName('stocks', 'Borsa & Hisse'), icon: LineChart },
+    { id: 'crypto', label: getAssetTypeName('crypto', 'Kripto'), icon: Bitcoin },
+    { id: 'currency', label: getAssetTypeName('currency', 'Döviz'), icon: Banknote },
+    { id: 'deposit', label: getAssetTypeName('deposit', 'Vadeli Mevduat'), icon: Landmark },
+    { id: 'daily_interest', label: getAssetTypeName('daily_interest', 'Günlük Faiz'), icon: Clock },
   ];
 
   const filteredInvestments = useMemo(() => {
@@ -39,18 +46,18 @@ export function InvestmentList() {
     return investments.filter((inv) => inv.type === selectedAssetType);
   }, [investments, selectedAssetType]);
 
-  const isOverallProfit = financialSummary.totalInvestmentProfit >= 0;
+  const isOverallProfit = (financialSummary?.totalInvestmentProfit ?? 0) >= 0;
 
   return (
     <div className="space-y-6 pb-20">
       {/* Top Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Yatırım Portföyü
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {t('investments.title')}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Altın, hisse senedi, döviz ve kripto varlıklarınızı takip edin
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            {t('investments.subtitle')}
           </p>
         </div>
 
@@ -60,7 +67,7 @@ export function InvestmentList() {
           icon={Plus}
           className="text-xs"
         >
-          Varlık Ekle
+          {t('investments.addAsset', 'Varlık Ekle')}
         </Button>
       </div>
 
@@ -73,7 +80,7 @@ export function InvestmentList() {
         <div className="relative z-10 space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Toplam Portföy Değeri
+              {t('investments.totalPortfolioValue', 'Toplam Portföy Değeri')}
             </span>
             <div
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
@@ -83,30 +90,30 @@ export function InvestmentList() {
               }`}
             >
               {isOverallProfit ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-              <span>{formatPercent(financialSummary.totalInvestmentProfitPercent)}</span>
+              <span>{formatPercent(financialSummary?.totalInvestmentProfitPercent || 0)}</span>
             </div>
           </div>
 
           <div className="text-3xl sm:text-4xl font-black tracking-tight">
-            {formatMoney(financialSummary.totalInvestmentCurrentValue)}
+            {formatMoney(financialSummary?.totalInvestmentCurrentValue || 0)}
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-700/60 text-xs">
             <div>
-              <div className="text-slate-400 font-medium">Toplam Yatırılan Maliyet</div>
+              <div className="text-slate-400 font-medium">{t('investments.totalCost', 'Toplam Yatırılan Maliyet')}</div>
               <div className="text-base font-bold text-slate-200 mt-0.5">
-                {formatMoney(financialSummary.totalInvestmentCost)}
+                {formatMoney(financialSummary?.totalInvestmentCost || 0)}
               </div>
             </div>
 
             <div>
-              <div className="text-slate-400 font-medium">Toplam Net Kâr / Zarar</div>
+              <div className="text-slate-400 font-medium">{t('investments.totalProfit', 'Toplam Net Kâr / Zarar')}</div>
               <div
                 className={`text-base font-extrabold mt-0.5 ${
                   isOverallProfit ? 'text-emerald-400' : 'text-rose-400'
                 }`}
               >
-                {formatMoney(financialSummary.totalInvestmentProfit, true)}
+                {formatMoney(financialSummary?.totalInvestmentProfit || 0, true)}
               </div>
             </div>
           </div>
@@ -124,8 +131,8 @@ export function InvestmentList() {
               onClick={() => setSelectedAssetType(tab.id)}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 isSelected
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
+                  ? 'bg-primary-600 text-white shadow-sm shadow-primary-500/20'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -144,15 +151,15 @@ export function InvestmentList() {
         </div>
       ) : (
         /* Empty State */
-        <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center flex flex-col items-center">
-          <div className="w-14 h-14 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center mb-3">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-12 text-center flex flex-col items-center">
+          <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-400 flex items-center justify-center mb-3">
             <Coins className="w-7 h-7 text-amber-500" />
           </div>
-          <h3 className="text-base font-bold text-slate-800 mb-1">
-            Varlık Kaydı Bulunamadı
+          <h3 className="text-base font-bold text-slate-800 dark:text-white mb-1">
+            {t('investments.noAssets', 'Varlık Kaydı Bulunamadı')}
           </h3>
-          <p className="text-xs text-slate-500 max-w-xs mb-5">
-            Altın, borsa hissesi, döviz veya fon gibi varlıklarınızı ekleyerek kâr/zarar durumunuzu takip edin.
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mb-5">
+            {t('investments.noAssetsDesc', 'Altın, borsa hissesi, döviz veya fon gibi varlıklarınızı ekleyerek kâr/zarar durumunuzu takip edin.')}
           </p>
           <Button
             variant="primary"
@@ -160,7 +167,7 @@ export function InvestmentList() {
             icon={Plus}
             onClick={() => openAddInvestmentModal()}
           >
-            Yeni Varlık Ekle
+            {t('investments.addAsset', 'Yeni Varlık Ekle')}
           </Button>
         </div>
       )}

@@ -93,7 +93,27 @@ export const StorageService = {
         this.saveCategories(DEFAULT_CATEGORIES);
         return DEFAULT_CATEGORIES;
       }
-      return JSON.parse(data);
+      const loaded = JSON.parse(data);
+      if (Array.isArray(loaded)) {
+        const existingIds = new Set(loaded.map((c) => c.id));
+        const missingDefaults = DEFAULT_CATEGORIES.filter((dc) => !existingIds.has(dc.id));
+        let hasUpdates = false;
+        const updatedList = loaded.map((c) => {
+          if (c.id === 'interest' && c.name !== 'Faiz Kazancı') {
+            hasUpdates = true;
+            return { ...c, name: 'Faiz Kazancı' };
+          }
+          return c;
+        });
+
+        if (missingDefaults.length > 0 || hasUpdates) {
+          const merged = [...updatedList, ...missingDefaults];
+          this.saveCategories(merged);
+          return merged;
+        }
+        return updatedList;
+      }
+      return DEFAULT_CATEGORIES;
     } catch (e) {
       console.error('Failed to load categories:', e);
       return DEFAULT_CATEGORIES;
