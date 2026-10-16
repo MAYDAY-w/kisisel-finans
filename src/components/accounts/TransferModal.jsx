@@ -128,31 +128,31 @@ export function TransferModal() {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
-            className="w-full text-2xl font-bold px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-500"
+            className="w-full text-2xl font-bold px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
 
           {toAcc?.type === 'credit_card' && (
-            <div className="mt-2 p-2.5 rounded-xl bg-purple-50/80 border border-purple-100 text-xs space-y-1">
+            <div className="mt-2 p-2.5 rounded-xl bg-purple-50/80 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-800/40 text-xs space-y-1">
               {Number(toAcc.balance) < 0 ? (
-                <div className="flex items-center justify-between text-purple-900">
+                <div className="flex items-center justify-between text-purple-900 dark:text-purple-200">
                   <span>{t('accounts.currentDebt')}: <strong>{formatMoney(Math.abs(toAcc.balance))}</strong></span>
                   <button
                     type="button"
                     onClick={() => setAmount(String(Math.abs(toAcc.balance)))}
-                    className="text-[11px] font-bold text-purple-700 hover:text-purple-900 underline"
+                    className="text-[11px] font-bold text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-purple-100 underline"
                   >
                     {language === 'en' ? 'Pay exact debt' : 'Borcu Kapat'}
                   </button>
                 </div>
               ) : (
-                <div className="text-emerald-700 font-medium">
+                <div className="text-emerald-700 dark:text-emerald-400 font-medium">
                   {language === 'en'
                     ? `Current excess balance: +${formatMoney(toAcc.balance || 0)}. Any transfer will further increase available limit.`
                     : `Mevcut artı bakiye: +${formatMoney(toAcc.balance || 0)}. Yapılan transfer kullanılabilir kart limitini geçici olarak artıracaktır.`}
                 </div>
               )}
               {Number(toAcc.balance) < 0 && Number(amount) > Math.abs(toAcc.balance) && (
-                <div className="text-emerald-700 font-semibold pt-1 border-t border-purple-200/50">
+                <div className="text-emerald-700 dark:text-emerald-400 font-semibold pt-1 border-t border-purple-200/50 dark:border-purple-800/50">
                   {language === 'en'
                     ? `✨ Debt will be settled (0 ₺), and +${formatMoney(Number(amount) - Math.abs(toAcc.balance))} excess will boost your available limit!`
                     : `✨ Kart borcu tamamen kapatılacak ve fazla gönderilen +${formatMoney(Number(amount) - Math.abs(toAcc.balance))} kullanılabilir limiti geçici olarak artıracaktır!`}
@@ -164,7 +164,7 @@ export function TransferModal() {
 
         {/* Description */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('transfer.description')}
           </label>
           <input
@@ -172,7 +172,7 @@ export function TransferModal() {
             placeholder="..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 

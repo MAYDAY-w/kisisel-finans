@@ -51,14 +51,14 @@ export function BudgetFormModal() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Category */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('budget.category')}
           </label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             disabled={Boolean(editingBudget)}
-            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
           >
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
@@ -70,7 +70,7 @@ export function BudgetFormModal() {
 
         {/* Limit */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('budget.monthlyLimit')}
           </label>
           <input
@@ -80,7 +80,7 @@ export function BudgetFormModal() {
             value={limit}
             onChange={(e) => setLimit(e.target.value)}
             required
-            className="w-full text-2xl font-bold px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-500"
+            className="w-full text-2xl font-bold px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 

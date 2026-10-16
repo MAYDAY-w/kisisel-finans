@@ -310,8 +310,8 @@ export function InvestmentFormModal() {
     const assets = POPULAR_ASSETS[type];
     if (!assets || !showSuggestions) return null;
     return (
-      <div className="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto left-0">
-        <div className="px-3 py-2 bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider sticky top-0">
+      <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-60 overflow-y-auto left-0">
+        <div className="px-3 py-2 bg-slate-50 dark:bg-slate-750 border-b border-slate-100 dark:border-slate-700 text-[10px] font-bold text-slate-400 uppercase tracking-wider sticky top-0">
           {t('investments.popularPicks')}
         </div>
         {assets.map(asset => {
@@ -335,19 +335,19 @@ export function InvestmentFormModal() {
                  if (price) setCurrentPrice(price.toString());
                  setShowSuggestions(false);
                }}
-               className="flex items-center justify-between px-3 py-2.5 hover:bg-emerald-50 cursor-pointer border-b border-slate-50 last:border-0 transition-colors"
+               className="flex items-center justify-between px-3 py-2.5 hover:bg-emerald-50 dark:hover:bg-slate-700/60 cursor-pointer border-b border-slate-50 dark:border-slate-700/50 last:border-0 transition-colors"
              >
                <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-sm shadow-sm border border-slate-200">
+                 <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-sm shadow-sm border border-slate-200 dark:border-slate-600">
                    {asset.icon}
                  </div>
                  <div className="flex flex-col">
-                   <span className="text-sm font-bold text-slate-800">{asset.id}</span>
-                   <span className="text-[10px] font-medium text-slate-500">{asset.name}</span>
+                   <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{asset.id}</span>
+                   <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">{asset.name}</span>
                  </div>
                </div>
                {price && (
-                 <div className="text-sm font-bold text-emerald-600">
+                 <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
                    {parseFloat(price) < 10 ? parseFloat(price).toFixed(4) : parseFloat(price).toLocaleString('tr-TR', { maximumFractionDigits: 2 })} ₺
                  </div>
                )}
@@ -359,20 +359,20 @@ export function InvestmentFormModal() {
   };
 
   const renderLinkedAccountSection = () => (
-    <div className="p-3.5 bg-slate-50/90 border border-slate-200/80 rounded-2xl space-y-2">
+    <div className="p-3.5 bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl space-y-2">
       <div className="flex items-center justify-between">
-        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-          <Landmark className="w-3.5 h-3.5 text-slate-500" />
+        <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+          <Landmark className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
           <span>{t('investments.linkedAccount')}</span>
         </label>
       </div>
-      <p className="text-[11px] text-slate-500 leading-tight">
+      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
         {t('investments.linkedAccountSubtitle')}
       </p>
       <select
         value={accountId}
         onChange={(e) => setAccountId(e.target.value)}
-        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"
+        className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
       >
         <option value="">{t('investments.noLinkedAccount')}</option>
         {accounts.map((acc) => (
@@ -383,17 +383,17 @@ export function InvestmentFormModal() {
       </select>
 
       {type === 'daily_interest' && accountId ? (
-        <div className="p-2.5 bg-teal-50 border border-teal-200 rounded-xl text-[11px] text-teal-800 leading-relaxed mt-1">
+        <div className="p-2.5 bg-teal-50/80 dark:bg-teal-950/25 border border-teal-200/80 dark:border-teal-800/40 rounded-xl text-[11px] text-teal-800 dark:text-teal-200 leading-relaxed mt-1">
           {t('investments.liquidDailyNotice')}
         </div>
       ) : (
         !editingInvestment && accountId && !isInterest && parseFloat(purchasePrice) > 0 && (
-          <label className="flex items-center gap-2 cursor-pointer mt-1 pt-2 border-t border-slate-200/60 text-xs font-semibold text-slate-700">
+          <label className="flex items-center gap-2 cursor-pointer mt-1 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 text-xs font-semibold text-slate-700 dark:text-slate-300">
             <input
               type="checkbox"
               checked={deductFromAccount}
               onChange={(e) => setDeductFromAccount(e.target.checked)}
-              className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+              className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
             />
             <span>
               {t('investments.deductOpeningAmount', {
@@ -417,7 +417,7 @@ export function InvestmentFormModal() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Asset Type Selector */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
             {t('investments.assetClass')}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -428,8 +428,8 @@ export function InvestmentFormModal() {
                 onClick={() => handleTypeChange(aType.id)}
                 className={`py-2 px-2.5 rounded-xl border text-xs font-semibold transition-all text-center ${
                   type === aType.id
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'bg-slate-900 dark:bg-emerald-600 text-white border-slate-900 dark:border-emerald-600 shadow-sm'
+                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750'
                 }`}
               >
                 {getAssetTypeName(aType.id)}
@@ -440,7 +440,7 @@ export function InvestmentFormModal() {
 
         {/* Asset Name */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
             {t('investments.assetName')}
           </label>
           <div className="relative">
@@ -452,7 +452,7 @@ export function InvestmentFormModal() {
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setShowSuggestions(false)}
               required
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
             {renderSuggestions()}
           </div>
@@ -463,13 +463,13 @@ export function InvestmentFormModal() {
           <div className="space-y-4">
             {/* Currency Dropdown (TL, USD, EUR, GBP) */}
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                 {t('investments.currencyOrUnit')}
               </label>
               <select
                 value={unit === 'TRY' ? 'TL' : unit}
                 onChange={(e) => setUnit(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
               >
                 <option value="TL">₺ TL (Türk Lirası)</option>
                 <option value="USD">$ USD (Amerikan Doları)</option>
@@ -483,27 +483,27 @@ export function InvestmentFormModal() {
 
             {/* Principal Amount & Maturity Value */}
             {accountId && selectedAccount ? (
-              <div className="p-3.5 bg-emerald-50/90 border border-emerald-200/80 rounded-2xl space-y-1 shadow-2xs">
+              <div className="p-3.5 bg-emerald-50/90 dark:bg-emerald-950/25 border border-emerald-200/80 dark:border-emerald-800/40 rounded-2xl space-y-1 shadow-2xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <Landmark className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-200 uppercase tracking-wider flex items-center gap-1.5">
+                    <Landmark className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     <span>{t('investments.principalFromAccount')}</span>
                   </span>
-                  <span className="text-[10.5px] font-bold text-emerald-700 bg-emerald-100/90 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
+                  <span className="text-[10.5px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100/90 dark:bg-emerald-900/50 px-2.5 py-0.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/50">
                     {selectedAccount.name}
                   </span>
                 </div>
-                <div className="text-xl font-black text-emerald-900 tracking-tight">
+                <div className="text-xl font-black text-emerald-900 dark:text-emerald-100 tracking-tight">
                   {formatMoney(selectedAccount.balance)}
                 </div>
-                <p className="text-[11px] text-emerald-700/90 leading-tight">
+                <p className="text-[11px] text-emerald-700/90 dark:text-emerald-300/90 leading-tight">
                   {t('investments.principalFromAccountDesc', { name: selectedAccount.name })}
                 </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                     {t('investments.principalAmount')}
                   </label>
                   <input
@@ -513,11 +513,11 @@ export function InvestmentFormModal() {
                     value={purchasePrice}
                     onChange={(e) => setPurchasePrice(e.target.value)}
                     required
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                     {t('investments.maturityTotal')}
                   </label>
                   <input
@@ -526,7 +526,7 @@ export function InvestmentFormModal() {
                     placeholder="0,00"
                     value={currentPrice}
                     onChange={(e) => setCurrentPrice(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
               </div>
@@ -537,7 +537,7 @@ export function InvestmentFormModal() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                   {t('investments.quantity')}
                 </label>
                 <input
@@ -547,11 +547,11 @@ export function InvestmentFormModal() {
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   required
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                   {t('investments.unit')}
                 </label>
                 <input
@@ -559,14 +559,14 @@ export function InvestmentFormModal() {
                   placeholder="gram, lot, adet..."
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                   {t('investments.costPrice')}
                 </label>
                 <input
@@ -576,17 +576,17 @@ export function InvestmentFormModal() {
                   value={purchasePrice}
                   onChange={(e) => setPurchasePrice(e.target.value)}
                   required
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 flex justify-between items-center">
+                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 flex justify-between items-center">
                   <span>{t('investments.currentPrice')}</span>
                   <button 
                     type="button" 
                     onClick={() => fetchLivePrice()} 
                     disabled={isFetchingPrice} 
-                    className="text-emerald-600 hover:text-emerald-700 normal-case bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 transition-colors"
+                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 normal-case bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800/60 transition-colors"
                   >
                     {isFetchingPrice ? "..." : t('investments.fetchLivePrice')}
                   </button>
@@ -597,7 +597,7 @@ export function InvestmentFormModal() {
                   placeholder="0,00"
                   value={currentPrice}
                   onChange={(e) => setCurrentPrice(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
             </div>
@@ -616,20 +616,20 @@ export function InvestmentFormModal() {
           });
 
           return (
-            <div className="p-3.5 bg-teal-50/90 border border-teal-100 rounded-xl space-y-3">
+            <div className="p-3.5 bg-teal-50/90 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-800/40 rounded-xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-teal-900 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-teal-900 dark:text-teal-200 flex items-center gap-1.5">
                   <span>⏱️</span>
                   <span>{t('investments.dailyInterestCalculator')}</span>
                 </span>
-                <span className="text-[10px] font-semibold text-teal-700 bg-teal-100/80 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-semibold text-teal-700 dark:text-teal-300 bg-teal-100/80 dark:bg-teal-900/50 px-2 py-0.5 rounded-full">
                   {t('investments.stopajNotice', { rate: stopajRate })}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-semibold text-teal-700 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-teal-700 dark:text-teal-300 uppercase mb-1">
                     {t('investments.annualRate')}
                   </label>
                   <input
@@ -638,11 +638,11 @@ export function InvestmentFormModal() {
                     placeholder="49"
                     value={interestRate}
                     onChange={(e) => setInterestRate(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-white border border-teal-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-teal-500"
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-teal-200 dark:border-teal-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-teal-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold text-teal-700 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-teal-700 dark:text-teal-300 uppercase mb-1">
                     {t('investments.uninvestedFloor')}
                   </label>
                   <input
@@ -651,7 +651,7 @@ export function InvestmentFormModal() {
                     placeholder="0"
                     value={uninvestedAmount}
                     onChange={(e) => setUninvestedAmount(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-white border border-teal-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-teal-500"
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-teal-200 dark:border-teal-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-teal-500"
                   />
                 </div>
               </div>
@@ -659,10 +659,10 @@ export function InvestmentFormModal() {
               {/* Stopaj Vergi Kesintisi Oranı */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[10px] font-semibold text-teal-700 uppercase">
+                  <label className="block text-[10px] font-semibold text-teal-700 dark:text-teal-300 uppercase">
                     {t('investments.stopajRate')}
                   </label>
-                  <span className="text-[10px] text-teal-600 font-medium">
+                  <span className="text-[10px] text-teal-600 dark:text-teal-400 font-medium">
                     (Standart: %10)
                   </span>
                 </div>
@@ -673,7 +673,7 @@ export function InvestmentFormModal() {
                     placeholder="10"
                     value={stopajRate}
                     onChange={(e) => setStopajRate(e.target.value)}
-                    className="w-20 px-2.5 py-1.5 bg-white border border-teal-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-teal-500"
+                    className="w-20 px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-teal-200 dark:border-teal-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-teal-500"
                   />
                   <div className="flex items-center gap-1 flex-1 overflow-x-auto">
                     {['10', '7.5', '5', '15', '0'].map((val) => (
@@ -684,7 +684,7 @@ export function InvestmentFormModal() {
                         className={`px-2 py-1 rounded text-[10px] font-bold transition-colors ${
                           stopajRate === val
                             ? 'bg-teal-700 text-white shadow-xs'
-                            : 'bg-white text-teal-800 border border-teal-200 hover:bg-teal-100/50'
+                            : 'bg-white dark:bg-slate-800 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60 hover:bg-teal-100/50 dark:hover:bg-teal-900/30'
                         }`}
                       >
                         %{val}
@@ -696,13 +696,13 @@ export function InvestmentFormModal() {
 
               {/* Additions list if any */}
               {additions.length > 0 && (
-                <div className="bg-white/80 p-2.5 rounded-lg border border-teal-100 text-[11px] space-y-1.5">
-                  <div className="flex justify-between font-bold text-teal-900 border-b border-teal-50 pb-1">
+                <div className="bg-white/80 dark:bg-slate-800/80 p-2.5 rounded-lg border border-teal-100 dark:border-teal-800/40 text-[11px] space-y-1.5">
+                  <div className="flex justify-between font-bold text-teal-900 dark:text-teal-200 border-b border-teal-50 dark:border-teal-900/40 pb-1">
                     <span>{t('investments.balanceAdditions')} ({additions.length})</span>
-                    <span className="text-emerald-700">+{formatMoney(stats.additionsTotal)}</span>
+                    <span className="text-emerald-700 dark:text-emerald-400">+{formatMoney(stats.additionsTotal)}</span>
                   </div>
                   {additions.map((a) => (
-                    <div key={a.id} className="flex items-center justify-between text-slate-600 text-[10px]">
+                    <div key={a.id} className="flex items-center justify-between text-slate-600 dark:text-slate-300 text-[10px]">
                       <span>{formatDate(a.date)}: +{formatMoney(a.amount)} {a.note ? `(${a.note})` : ''}</span>
                       <button
                         type="button"
@@ -713,7 +713,7 @@ export function InvestmentFormModal() {
                       </button>
                     </div>
                   ))}
-                  <div className="flex justify-between pt-1 border-t border-teal-50 font-extrabold text-slate-800">
+                  <div className="flex justify-between pt-1 border-t border-teal-50 dark:border-teal-900/40 font-extrabold text-slate-800 dark:text-slate-100">
                     <span>{t('investments.newTotalPrincipal')}:</span>
                     <span>{formatMoney(stats.totalPrincipal)}</span>
                   </div>
@@ -721,25 +721,25 @@ export function InvestmentFormModal() {
               )}
 
               {(effectivePrincipal > 0 || purchasePrice) && interestRate && (
-                <div className="bg-white p-2.5 rounded-lg border border-teal-100 text-[11px] space-y-1.5 shadow-2xs">
-                  <div className="flex justify-between text-slate-600">
+                <div className="bg-white dark:bg-slate-800/90 p-2.5 rounded-lg border border-teal-100 dark:border-teal-800/40 text-[11px] space-y-1.5 shadow-2xs">
+                  <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>{t('investments.dailyGrossReturn')}:</span>
-                    <span className="font-semibold text-slate-800">+{stats.currentGrossDaily.toFixed(2)} {unitSymbol}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">+{stats.currentGrossDaily.toFixed(2)} {unitSymbol}</span>
                   </div>
-                  <div className="flex justify-between text-rose-600">
+                  <div className="flex justify-between text-rose-600 dark:text-rose-400">
                     <span>{t('investments.dailyStopaj')} (%{stopajRate}):</span>
                     <span className="font-semibold">-{stats.currentDailyTax.toFixed(2)} {unitSymbol}</span>
                   </div>
-                  <div className="flex justify-between text-slate-700 pt-1 border-t border-teal-50">
+                  <div className="flex justify-between text-slate-700 dark:text-slate-300 pt-1 border-t border-teal-50 dark:border-teal-900/40">
                     <span className="font-bold">{t('investments.dailyNetReturn')}:</span>
-                    <strong className="text-teal-700 font-extrabold text-xs">
+                    <strong className="text-teal-700 dark:text-teal-300 font-extrabold text-xs">
                       +{stats.currentDailyNet.toFixed(2)} {unitSymbol} / {t('investments.dailyGain')}
                     </strong>
                   </div>
                   {stats.baseDays > 0 && (
-                    <div className="flex justify-between text-slate-500 pt-0.5 text-[10px]">
+                    <div className="flex justify-between text-slate-500 dark:text-slate-400 pt-0.5 text-[10px]">
                       <span>{t('investments.elapsedTime')} ({stats.baseDays} {t('common.days')}):</span>
-                      <span className="font-semibold text-teal-800">+{stats.totalAccruedNet.toFixed(2)} {unitSymbol} {t('investments.accruedNetGain')}</span>
+                      <span className="font-semibold text-teal-800 dark:text-teal-200">+{stats.totalAccruedNet.toFixed(2)} {unitSymbol} {t('investments.accruedNetGain')}</span>
                     </div>
                   )}
                 </div>
@@ -768,19 +768,19 @@ export function InvestmentFormModal() {
           });
 
           return (
-            <div className="p-3.5 bg-indigo-50/80 border border-indigo-100 rounded-xl space-y-2.5">
+            <div className="p-3.5 bg-indigo-50/80 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-800/40 rounded-xl space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 flex items-center gap-1.5">
                   <span>🏦</span>
                   <span>{t('investments.depositCalculator')}</span>
                 </span>
-                <span className="text-[10px] font-semibold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-100/80 dark:bg-indigo-900/50 px-2 py-0.5 rounded-full">
                   {t('investments.stopajNotice', { rate: stopajRate })}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-semibold text-indigo-700 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-indigo-700 dark:text-indigo-300 uppercase mb-1">
                     {t('investments.annualRate')}
                   </label>
                   <input
@@ -789,11 +789,11 @@ export function InvestmentFormModal() {
                     placeholder="48"
                     value={interestRate}
                     onChange={(e) => setInterestRate(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-white border border-indigo-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-500"
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold text-indigo-700 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-indigo-700 dark:text-indigo-300 uppercase mb-1">
                     {t('investments.maturityDays')}
                   </label>
                   <input
@@ -801,7 +801,7 @@ export function InvestmentFormModal() {
                     placeholder="32"
                     value={maturityDays}
                     onChange={(e) => setMaturityDays(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-white border border-indigo-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-500"
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
@@ -809,7 +809,7 @@ export function InvestmentFormModal() {
               {/* Stopaj Vergi Kesintisi Oranı */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[10px] font-semibold text-indigo-700 uppercase">
+                  <label className="block text-[10px] font-semibold text-indigo-700 dark:text-indigo-300 uppercase">
                     {t('investments.stopajRate')}
                   </label>
                 </div>
@@ -820,7 +820,7 @@ export function InvestmentFormModal() {
                     placeholder="10"
                     value={stopajRate}
                     onChange={(e) => setStopajRate(e.target.value)}
-                    className="w-20 px-2.5 py-1.5 bg-white border border-indigo-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-indigo-500"
+                    className="w-20 px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
                   />
                   <div className="flex items-center gap-1 flex-1 overflow-x-auto">
                     {['10', '7.5', '5', '0'].map((val) => (
@@ -831,7 +831,7 @@ export function InvestmentFormModal() {
                         className={`px-2 py-1 rounded text-[10px] font-bold transition-colors ${
                           stopajRate === val
                             ? 'bg-indigo-700 text-white shadow-xs'
-                            : 'bg-white text-indigo-800 border border-indigo-200 hover:bg-indigo-100/50'
+                            : 'bg-white dark:bg-slate-800 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 hover:bg-indigo-100/50 dark:hover:bg-indigo-900/30'
                         }`}
                       >
                         %{val}
@@ -843,13 +843,13 @@ export function InvestmentFormModal() {
 
               {/* Additions list if any */}
               {additions.length > 0 && (
-                <div className="bg-white/80 p-2.5 rounded-lg border border-indigo-100 text-[11px] space-y-1.5">
-                  <div className="flex justify-between font-bold text-indigo-900 border-b border-indigo-50 pb-1">
+                <div className="bg-white/80 dark:bg-slate-800/80 p-2.5 rounded-lg border border-indigo-100 dark:border-indigo-800/40 text-[11px] space-y-1.5">
+                  <div className="flex justify-between font-bold text-indigo-900 dark:text-indigo-200 border-b border-indigo-50 dark:border-indigo-900/40 pb-1">
                     <span>{t('investments.balanceAdditions')} ({additions.length})</span>
-                    <span className="text-emerald-700">+{formatMoney(stats.additionsTotal)}</span>
+                    <span className="text-emerald-700 dark:text-emerald-400">+{formatMoney(stats.additionsTotal)}</span>
                   </div>
                   {additions.map((a) => (
-                    <div key={a.id} className="flex items-center justify-between text-slate-600 text-[10px]">
+                    <div key={a.id} className="flex items-center justify-between text-slate-600 dark:text-slate-300 text-[10px]">
                       <span>{formatDate(a.date)}: +{formatMoney(a.amount)} {a.note ? `(${a.note})` : ''}</span>
                       <button
                         type="button"
@@ -860,7 +860,7 @@ export function InvestmentFormModal() {
                       </button>
                     </div>
                   ))}
-                  <div className="flex justify-between pt-1 border-t border-indigo-50 font-extrabold text-slate-800">
+                  <div className="flex justify-between pt-1 border-t border-indigo-50 dark:border-indigo-900/40 font-extrabold text-slate-800 dark:text-slate-100">
                     <span>{t('investments.newTotalPrincipal')}:</span>
                     <span>{formatMoney(stats.totalPrincipal)}</span>
                   </div>
@@ -868,18 +868,18 @@ export function InvestmentFormModal() {
               )}
 
               {stats.totalPrincipal > 0 && interestRate && (
-                <div className="bg-white p-2.5 rounded-lg border border-indigo-100 text-[11px] space-y-1.5 shadow-2xs">
-                  <div className="flex justify-between text-slate-600">
+                <div className="bg-white dark:bg-slate-800/90 p-2.5 rounded-lg border border-indigo-100 dark:border-indigo-800/40 text-[11px] space-y-1.5 shadow-2xs">
+                  <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>{t('investments.grossInterestReturn')}:</span>
-                    <span className="font-semibold text-slate-800">+{stats.totalGrossInterest.toFixed(2)} {unitSymbol}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">+{stats.totalGrossInterest.toFixed(2)} {unitSymbol}</span>
                   </div>
-                  <div className="flex justify-between text-rose-600">
+                  <div className="flex justify-between text-rose-600 dark:text-rose-400">
                     <span>{t('investments.stopajAmount')} (%{stopajRate}):</span>
                     <span className="font-semibold">-{stats.totalTax.toFixed(2)} {unitSymbol}</span>
                   </div>
-                  <div className="flex justify-between text-slate-700 pt-1 border-t border-indigo-50">
+                  <div className="flex justify-between text-slate-700 dark:text-slate-300 pt-1 border-t border-indigo-50 dark:border-indigo-900/40">
                     <span className="font-bold">{t('investments.netInterestReturn')}:</span>
-                    <strong className="text-indigo-700 font-extrabold text-xs">
+                    <strong className="text-indigo-700 dark:text-indigo-300 font-extrabold text-xs">
                       +{stats.totalNetInterest.toFixed(2)} {unitSymbol}
                     </strong>
                   </div>
@@ -902,20 +902,20 @@ export function InvestmentFormModal() {
 
         {/* Purchase Date */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
             {t('investments.purchaseDate')}
           </label>
           <input
             type="date"
             value={purchaseDate}
             onChange={(e) => setPurchaseDate(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
         {/* Optional Note */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
             {t('transactions.note')}
           </label>
           <input
@@ -923,7 +923,7 @@ export function InvestmentFormModal() {
             placeholder="..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 

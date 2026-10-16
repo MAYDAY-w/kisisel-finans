@@ -89,14 +89,14 @@ export function RecurringFormModal() {
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Type Toggle: Gider / Gelir */}
-        <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-2xl">
+        <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl">
           <button
             type="button"
             onClick={() => setType('expense')}
             className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
               type === 'expense'
-                ? 'bg-white text-rose-600 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-rose-600 dark:text-rose-400 shadow-sm'
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ArrowDownLeft className="w-3.5 h-3.5" />
@@ -107,8 +107,8 @@ export function RecurringFormModal() {
             onClick={() => setType('income')}
             className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
               type === 'income'
-                ? 'bg-white text-emerald-600 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -118,7 +118,7 @@ export function RecurringFormModal() {
 
         {/* Title */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('transactions.title')}
           </label>
           <input
@@ -127,13 +127,13 @@ export function RecurringFormModal() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
+            className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-750"
           />
         </div>
 
         {/* Amount */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('transactions.amount')} (TL)
           </label>
           <div className="relative">
@@ -144,7 +144,7 @@ export function RecurringFormModal() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="w-full text-2xl font-black px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white pr-10"
+              className="w-full text-2xl font-black px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-750 pr-10"
             />
           </div>
         </div>
@@ -152,10 +152,10 @@ export function RecurringFormModal() {
         {/* Day of Month Selector */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               {t('recurring.monthlyDay', { day: dayOfMonth })}
             </label>
-            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
               {t('recurring.monthlyDay', { day: dayOfMonth })}
             </span>
           </div>
@@ -167,7 +167,7 @@ export function RecurringFormModal() {
               max="31"
               value={dayOfMonth}
               onChange={(e) => setDayOfMonth(Math.max(1, Math.min(31, parseInt(e.target.value) || 1)))}
-              className="w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-center font-black text-sm text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-20 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-center font-black text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             />
             <div className="flex items-center gap-1 overflow-x-auto py-1">
               {quickDays.map((d) => (
@@ -178,7 +178,7 @@ export function RecurringFormModal() {
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
                     dayOfMonth === d
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                      : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
                   }`}
                 >
                   {d}
@@ -191,13 +191,13 @@ export function RecurringFormModal() {
         {/* Category & Account */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('budget.category')}
             </label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -208,13 +208,13 @@ export function RecurringFormModal() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('debts.linkedAccount')}
             </label>
             <select
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 truncate"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 truncate"
             >
               {accounts.map((a) => (
                 <option key={a.id} value={a.id}>
@@ -230,20 +230,20 @@ export function RecurringFormModal() {
           onClick={() => setAutoProcess((prev) => !prev)}
           className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
             autoProcess
-              ? 'bg-emerald-50/70 border-emerald-300 shadow-sm'
-              : 'bg-slate-50 border-slate-200'
+              ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800/50 shadow-sm'
+              : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700'
           }`}
         >
           <div className="flex items-start gap-3">
             <div
               className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
-                autoProcess ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
+                autoProcess ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
               }`}
             >
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              <div className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <span>{t('recurring.autoProcessOn')}</span>
                 {autoProcess && (
                   <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full font-extrabold uppercase">
@@ -251,7 +251,7 @@ export function RecurringFormModal() {
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
                 {t('salaryModal.autoProcessDesc')}
               </p>
             </div>
@@ -259,7 +259,7 @@ export function RecurringFormModal() {
 
           <div
             className={`w-11 h-6 rounded-full p-0.5 transition-colors shrink-0 ${
-              autoProcess ? 'bg-emerald-600' : 'bg-slate-300'
+              autoProcess ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
             }`}
           >
             <div

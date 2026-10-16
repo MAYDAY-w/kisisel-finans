@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
@@ -132,12 +132,12 @@ export function DailyDetailModal() {
         <div className="space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Camera className="w-4 h-4 text-emerald-600" />
-              <h4 className="text-sm font-bold text-slate-900">
+              <Camera className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                 {t('daily.receiptsTitle')}
               </h4>
             </div>
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
               {t('daily.receiptCountBadge', { count: daySummary.receipts.length })}
             </span>
           </div>
@@ -148,9 +148,9 @@ export function DailyDetailModal() {
                 <div
                   key={receipt.id}
                   onClick={() => openReceiptViewer(receipt)}
-                  className="group relative bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col"
+                  className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col"
                 >
-                  <div className="aspect-[4/3] bg-slate-100 overflow-hidden relative">
+                  <div className="aspect-[4/3] bg-slate-100 dark:bg-slate-750 overflow-hidden relative">
                     <img
                       src={receipt.url}
                       alt={receipt.name || 'Receipt'}
@@ -163,11 +163,11 @@ export function DailyDetailModal() {
                     </div>
                   </div>
 
-                  <div className="p-2.5 text-xs flex flex-col justify-between flex-1 bg-white">
-                    <span className="font-bold text-slate-900 truncate">
+                  <div className="p-2.5 text-xs flex flex-col justify-between flex-1 bg-white dark:bg-slate-800">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 truncate">
                       {receipt.description || 'Receipt'}
                     </span>
-                    <span className="text-emerald-600 font-extrabold mt-1">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-extrabold mt-1">
                       {receipt.amountFormatted}
                     </span>
                   </div>
@@ -175,9 +175,9 @@ export function DailyDetailModal() {
               ))}
             </div>
           ) : (
-            <div className="p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-center flex flex-col items-center justify-center py-5">
-              <Camera className="w-6 h-6 text-slate-300 mb-1.5" />
-              <p className="text-xs text-slate-500">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-center flex flex-col items-center justify-center py-5">
+              <Camera className="w-6 h-6 text-slate-300 dark:text-slate-600 mb-1.5" />
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {t('daily.noTxToday')}
               </p>
             </div>
@@ -187,10 +187,10 @@ export function DailyDetailModal() {
         {/* TRANSACTIONS OF THIS DAY */}
         <div className="space-y-2.5">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-bold text-slate-900">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
               {t('daily.allDayTx')}
             </h4>
-            <span className="text-xs text-slate-500 font-medium">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               {dayTransactions.length} {t('nav.transactions')}
             </span>
           </div>
@@ -202,14 +202,14 @@ export function DailyDetailModal() {
               ))}
             </div>
           ) : (
-            <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl text-center">
-              <p className="text-xs text-slate-500">{t('daily.noTxToday')}</p>
+            <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-center">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('daily.noTxToday')}</p>
             </div>
           )}
         </div>
 
         {/* Bottom Actions */}
-        <div className="pt-2 flex items-center justify-between gap-3 border-t border-slate-100">
+        <div className="pt-2 flex items-center justify-between gap-3 border-t border-slate-100 dark:border-slate-800">
           <Button variant="secondary" onClick={closeDayDetail} className="flex-1">
             {t('common.close')}
           </Button>

@@ -144,12 +144,12 @@ export function TransactionFormModal() {
 
   // Type buttons configuration with icons
   const typeButtons = [
-    { type: TRANSACTION_TYPES.EXPENSE, label: getTransactionTypeName(TRANSACTION_TYPES.EXPENSE, 'Gider'), icon: ArrowDownLeft, color: 'hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-rose-700 bg-rose-50/80 border-rose-300' },
-    { type: TRANSACTION_TYPES.INCOME, label: getTransactionTypeName(TRANSACTION_TYPES.INCOME, 'Gelir'), icon: ArrowUpRight, color: 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 text-emerald-700 bg-emerald-50/80 border-emerald-300' },
-    { type: TRANSACTION_TYPES.PURCHASE, label: getTransactionTypeName(TRANSACTION_TYPES.PURCHASE, 'Alış'), icon: ShoppingBag, color: 'hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-blue-700 bg-blue-50/80 border-blue-300' },
-    { type: TRANSACTION_TYPES.SALE, label: getTransactionTypeName(TRANSACTION_TYPES.SALE, 'Satış'), icon: Coins, color: 'hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 text-amber-700 bg-amber-50/80 border-amber-300' },
-    { type: TRANSACTION_TYPES.INVESTMENT, label: getTransactionTypeName(TRANSACTION_TYPES.INVESTMENT, 'Yatırım'), icon: TrendingUp, color: 'hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 text-purple-700 bg-purple-50/80 border-purple-300' },
-    { type: TRANSACTION_TYPES.OTHER, label: getTransactionTypeName(TRANSACTION_TYPES.OTHER, 'Diğer'), icon: MoreHorizontal, color: 'hover:bg-slate-100 hover:text-slate-800 hover:border-slate-300 text-slate-800 bg-slate-100 border-slate-300' },
+    { type: TRANSACTION_TYPES.EXPENSE, label: getTransactionTypeName(TRANSACTION_TYPES.EXPENSE, 'Gider'), icon: ArrowDownLeft, color: 'hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-rose-700 bg-rose-50/80 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-700 dark:hover:bg-rose-900/40' },
+    { type: TRANSACTION_TYPES.INCOME, label: getTransactionTypeName(TRANSACTION_TYPES.INCOME, 'Gelir'), icon: ArrowUpRight, color: 'hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 text-emerald-700 bg-emerald-50/80 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700 dark:hover:bg-emerald-900/40' },
+    { type: TRANSACTION_TYPES.PURCHASE, label: getTransactionTypeName(TRANSACTION_TYPES.PURCHASE, 'Alış'), icon: ShoppingBag, color: 'hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-blue-700 bg-blue-50/80 border-blue-300 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-700 dark:hover:bg-blue-900/40' },
+    { type: TRANSACTION_TYPES.SALE, label: getTransactionTypeName(TRANSACTION_TYPES.SALE, 'Satış'), icon: Coins, color: 'hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 text-amber-700 bg-amber-50/80 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 dark:hover:bg-amber-900/40' },
+    { type: TRANSACTION_TYPES.INVESTMENT, label: getTransactionTypeName(TRANSACTION_TYPES.INVESTMENT, 'Yatırım'), icon: TrendingUp, color: 'hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 text-purple-700 bg-purple-50/80 border-purple-300 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-900/40' },
+    { type: TRANSACTION_TYPES.OTHER, label: getTransactionTypeName(TRANSACTION_TYPES.OTHER, 'Diğer'), icon: MoreHorizontal, color: 'hover:bg-slate-100 hover:text-slate-800 hover:border-slate-300 text-slate-800 bg-slate-100 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-750' },
   ];
 
   // Populate or reset form when modal opens
@@ -340,9 +340,9 @@ export function TransactionFormModal() {
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Voice Input Header Bar */}
-        <div className="flex items-center justify-between bg-emerald-50/80 p-2.5 rounded-2xl border border-emerald-200/80">
+        <div className="flex items-center justify-between bg-emerald-50/80 dark:bg-emerald-950/30 p-2.5 rounded-2xl border border-emerald-200/80 dark:border-emerald-800/50">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-emerald-900">
+            <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
               🎙️ {t('transactions.voiceInputTip', 'Sesinle Söyle, Doldursun')}
             </span>
           </div>
@@ -351,7 +351,7 @@ export function TransactionFormModal() {
 
         {/* Transaction Type Selector Pills */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
             {t('transactions.type', 'İşlem Türü')}
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -366,7 +366,7 @@ export function TransactionFormModal() {
                   className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                     isSelected
                       ? `${btn.color} ring-2 ring-offset-1 ring-current shadow-sm`
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                      : 'bg-white dark:bg-slate-800/90 border-slate-200 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5 shrink-0" />
@@ -378,8 +378,8 @@ export function TransactionFormModal() {
         </div>
 
         {/* Primary Amount Input */}
-        <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+        <div className="bg-slate-50 dark:bg-slate-800/70 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/70">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('common.amount')} ({settings.currency === 'USD' ? '$' : settings.currency === 'EUR' ? '€' : settings.currency === 'GBP' ? '£' : '₺'})
           </label>
           <div className="relative flex items-center">
@@ -392,12 +392,12 @@ export function TransactionFormModal() {
               value={amount}
               onChange={(e) => handleAmountChange(e.target.value)}
               required
-              className="w-full text-3xl font-extrabold text-slate-900 bg-transparent border-none outline-none focus:ring-0 placeholder:text-slate-300"
+              className="w-full text-3xl font-extrabold text-slate-900 dark:text-white bg-transparent border-none outline-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-600"
             />
           </div>
           {/* Quick preset buttons */}
-          <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-200/60 overflow-x-auto pb-1">
-            <span className="text-[11px] text-slate-400 font-medium shrink-0">{t('transactions.quickPreset', 'Hızlı')}:</span>
+          <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 overflow-x-auto pb-1">
+            <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium shrink-0">{t('transactions.quickPreset', 'Hızlı')}:</span>
             {[50, 100, 250, 500, 1000, 5000].map((preset) => (
               <button
                 type="button"
@@ -406,7 +406,7 @@ export function TransactionFormModal() {
                   const current = parseFloat(amount) || 0;
                   setAmount(String(current + preset));
                 }}
-                className="text-xs px-2.5 py-1 bg-white hover:bg-slate-200 border border-slate-200 rounded-lg text-slate-700 font-semibold transition-colors shrink-0"
+                className="text-xs px-2.5 py-1 bg-white dark:bg-slate-750 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-650 rounded-lg text-slate-700 dark:text-slate-200 font-semibold transition-colors shrink-0"
               >
                 +{preset}
               </button>
@@ -418,13 +418,13 @@ export function TransactionFormModal() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Account / Wallet */}
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('common.account')}
             </label>
             <select
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
-              className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             >
               {accounts.map((acc) => {
                 let label = `${acc.name} (${acc.balance.toLocaleString('tr-TR')} ₺)`;
@@ -456,13 +456,13 @@ export function TransactionFormModal() {
 
           {/* Category */}
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('common.category')}
             </label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             >
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
@@ -476,7 +476,7 @@ export function TransactionFormModal() {
         {/* Date & Description */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('common.date')}
             </label>
             <input
@@ -484,12 +484,12 @@ export function TransactionFormModal() {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('common.description')}
             </label>
             <input
@@ -497,22 +497,22 @@ export function TransactionFormModal() {
               placeholder={t('transactions.descriptionPlaceholder', 'Örn: Market alışverişi, Maaş, Gram Altın...')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"
+              className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
         </div>
 
         {/* RECEIPT / BILL PHOTO ATTACHMENT SECTION */}
-        <div className="p-3.5 bg-emerald-50/50 rounded-2xl border border-emerald-200/80 space-y-2.5">
+        <div className="p-3.5 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl border border-emerald-200/80 dark:border-emerald-800/40 space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Camera className="w-4 h-4 text-emerald-700" />
-              <span className="text-xs font-bold text-emerald-900">
+              <Camera className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
+              <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
                 {t('transactions.receiptPhoto', 'Fiş / Fatura Fotoğrafı')}
               </span>
             </div>
             {receiptImages.length > 0 && (
-              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/50 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
                 {receiptImages.length} {language === 'en' ? 'Receipts Attached' : 'Fiş Eklendi'}
               </span>
             )}
@@ -543,7 +543,7 @@ export function TransactionFormModal() {
               size="sm"
               onClick={() => cameraInputRef.current?.click()}
               icon={Camera}
-              className="flex-1 bg-white hover:bg-emerald-50 text-emerald-700 border-emerald-200 text-xs font-semibold"
+              className="flex-1 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60 text-xs font-semibold"
               disabled={isUploadingImage}
             >
               {t('transactions.takePhoto', 'Fotoğraf Çek')}
@@ -555,7 +555,7 @@ export function TransactionFormModal() {
               size="sm"
               onClick={() => fileInputRef.current?.click()}
               icon={ImageIcon}
-              className="flex-1 bg-white hover:bg-emerald-50 text-emerald-700 border-emerald-200 text-xs font-semibold"
+              className="flex-1 bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60 text-xs font-semibold"
               disabled={isUploadingImage}
             >
               {t('transactions.chooseFromGallery', 'Galeriden Seç')}
@@ -563,8 +563,8 @@ export function TransactionFormModal() {
           </div>
 
           {isUploadingImage && (
-            <div className="flex items-center justify-center gap-2 py-2 text-xs text-emerald-700 font-medium">
-              <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+            <div className="flex items-center justify-center gap-2 py-2 text-xs text-emerald-700 dark:text-emerald-300 font-medium">
+              <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-400" />
               <span>{language === 'en' ? 'Optimizing image...' : 'Görsel optimize ediliyor...'}</span>
             </div>
           )}
@@ -633,9 +633,9 @@ export function TransactionFormModal() {
           </button>
 
           {showAssetFields && (
-            <div className="mt-2 p-3 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2.5 animate-slide-up">
+            <div className="mt-2 p-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl space-y-2.5 animate-slide-up">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
                   {language === 'en' ? 'Asset / Item Name' : 'Varlık / Kalem Adı'}
                 </label>
                 <input
@@ -643,13 +643,13 @@ export function TransactionFormModal() {
                   placeholder={language === 'en' ? 'e.g. Gold Gram, Apple Stock, USD, MacBook' : 'Örn: Gram Altın, THYAO, USD, MacBook'}
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
                     {language === 'en' ? 'Quantity / Amount' : 'Miktar / Adet'}
                   </label>
                   <input
@@ -658,11 +658,11 @@ export function TransactionFormModal() {
                     placeholder="5"
                     value={quantity}
                     onChange={(e) => handleQuantityChange(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
                     {language === 'en' ? 'Unit Price' : 'Birim Fiyat'}
                   </label>
                   <input
@@ -671,7 +671,7 @@ export function TransactionFormModal() {
                     placeholder="4500"
                     value={unitPrice}
                     onChange={(e) => handleUnitPriceChange(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -682,9 +682,9 @@ export function TransactionFormModal() {
                     type="checkbox"
                     checked={alsoAddToPortfolio}
                     onChange={(e) => setAlsoAddToPortfolio(e.target.checked)}
-                    className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300"
+                    className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
                   />
-                  <span className="text-xs text-slate-700 font-medium">
+                  <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">
                     {language === 'en' ? 'Also add this item to my Investment Portfolio' : 'Bu kalemi Yatırım Portföyüme de ekle'}
                   </span>
                 </label>
@@ -700,7 +700,7 @@ export function TransactionFormModal() {
             placeholder={t('transactions.notePlaceholder', 'Ek notlar, ürün detayları vb. (isteğe bağlı)...')}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 resize-y"
+            className="w-full px-3 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 resize-y"
           />
         </div>
 

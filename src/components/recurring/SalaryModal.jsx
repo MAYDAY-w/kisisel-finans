@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
@@ -64,7 +64,7 @@ export function SalaryModal() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Salary Amount */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('salaryModal.amountLabel')}
           </label>
           <div className="relative">
@@ -76,7 +76,7 @@ export function SalaryModal() {
               onChange={(e) => setAmount(e.target.value)}
               required
               autoFocus
-              className="w-full text-2xl font-black px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all pr-12"
+              className="w-full text-2xl font-black px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-750 transition-all pr-12"
             />
           </div>
         </div>
@@ -84,10 +84,10 @@ export function SalaryModal() {
         {/* Day of Month Selector */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               {t('salaryModal.paydayLabel')}
             </label>
-            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
               {t('salaryModal.paydayEveryMonth', { day: dayOfMonth })}
             </span>
           </div>
@@ -99,9 +99,9 @@ export function SalaryModal() {
               max="31"
               value={dayOfMonth}
               onChange={(e) => setDayOfMonth(Math.max(1, Math.min(31, parseInt(e.target.value) || 1)))}
-              className="w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-center font-black text-sm text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-20 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-center font-black text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             />
-            <span className="text-xs text-slate-500">{t('salaryModal.quickSelect')}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">{t('salaryModal.quickSelect')}</span>
           </div>
 
           {/* Quick day buttons */}
@@ -114,7 +114,7 @@ export function SalaryModal() {
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   dayOfMonth === d
                     ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/30'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                    : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
                 }`}
               >
                 {d}
@@ -125,13 +125,13 @@ export function SalaryModal() {
 
         {/* Target Bank Account */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('salaryModal.targetAccount')}
           </label>
           <select
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white"
+            className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-750"
           >
             {accounts.map((acc) => (
               <option key={acc.id} value={acc.id}>
@@ -139,14 +139,14 @@ export function SalaryModal() {
               </option>
             ))}
           </select>
-          <p className="text-[11px] text-slate-400 mt-1">
+          <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
             {t('salaryModal.targetAccountHint')}
           </p>
         </div>
 
         {/* Title / Description */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('salaryModal.titleOptional')}
           </label>
           <input
@@ -154,7 +154,7 @@ export function SalaryModal() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={t('salaryModal.titlePlaceholder')}
-            className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
@@ -163,20 +163,20 @@ export function SalaryModal() {
           onClick={() => setAutoProcess((prev) => !prev)}
           className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
             autoProcess
-              ? 'bg-emerald-50/70 border-emerald-300 shadow-sm'
-              : 'bg-slate-50 border-slate-200'
+              ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800/50 shadow-sm'
+              : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700'
           }`}
         >
           <div className="flex items-start gap-3">
             <div
               className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
-                autoProcess ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
+                autoProcess ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
               }`}
             >
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              <div className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <span>{t('salaryModal.autoProcessTitle')}</span>
                 {autoProcess && (
                   <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full font-extrabold uppercase">
@@ -184,7 +184,7 @@ export function SalaryModal() {
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
                 {t('salaryModal.autoProcessDesc')}
               </p>
             </div>
@@ -192,7 +192,7 @@ export function SalaryModal() {
 
           <div
             className={`w-11 h-6 rounded-full p-0.5 transition-colors shrink-0 ${
-              autoProcess ? 'bg-emerald-600' : 'bg-slate-300'
+              autoProcess ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
             }`}
           >
             <div

@@ -198,7 +198,7 @@ export function DebtFormModal() {
       <form onSubmit={handleSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto pr-1">
         {/* Type Selector */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
             {t('transactions.type')}
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -208,7 +208,7 @@ export function DebtFormModal() {
               className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                 type === DEBT_TYPES.LENT
                   ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750'
               }`}
             >
               {t('debts.lent')}
@@ -219,7 +219,7 @@ export function DebtFormModal() {
               className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                 type === DEBT_TYPES.BORROWED
                   ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
-                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750'
               }`}
             >
               {t('debts.borrowed')}
@@ -229,7 +229,7 @@ export function DebtFormModal() {
 
         {/* Person / Institution Name */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('debts.personName')}
           </label>
           <input
@@ -238,13 +238,13 @@ export function DebtFormModal() {
             value={personName}
             onChange={(e) => setPersonName(e.target.value)}
             required
-            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
         {/* Principal Amount (Ana Para) */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {hasInterest ? t('debts.principalAmount') : t('debts.totalAmount')}
           </label>
           <input
@@ -254,23 +254,23 @@ export function DebtFormModal() {
             value={principalAmount}
             onChange={(e) => setPrincipalAmount(e.target.value)}
             required
-            className="w-full text-2xl font-bold px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-500"
+            className="w-full text-2xl font-bold px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
         {/* Interest Configuration Card */}
-        <div className="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-2xl space-y-3">
+        <div className="p-3.5 bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-800/40 rounded-2xl space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
-              <Percent className="w-4 h-4 text-amber-600" />
+            <span className="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+              <Percent className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>{t('debts.interestOption')}</span>
             </span>
-            <div className="flex bg-amber-100/70 p-0.5 rounded-lg border border-amber-200">
+            <div className="flex bg-amber-100/70 dark:bg-amber-900/40 p-0.5 rounded-lg border border-amber-200 dark:border-amber-800/50">
               <button
                 type="button"
                 onClick={() => setHasInterest(false)}
                 className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition-all ${
-                  !hasInterest ? 'bg-white text-slate-800 shadow-2xs' : 'text-amber-800 hover:text-amber-950'
+                  !hasInterest ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-2xs' : 'text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-amber-100'
                 }`}
               >
                 {t('debts.noInterest')}
@@ -279,7 +279,7 @@ export function DebtFormModal() {
                 type="button"
                 onClick={() => setHasInterest(true)}
                 className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition-all ${
-                  hasInterest ? 'bg-amber-600 text-white shadow-2xs' : 'text-amber-800 hover:text-amber-950'
+                  hasInterest ? 'bg-amber-600 text-white shadow-2xs' : 'text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-amber-100'
                 }`}
               >
                 {t('debts.withInterest')}
@@ -291,7 +291,7 @@ export function DebtFormModal() {
             <div className="space-y-2.5 pt-1">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-semibold text-amber-800 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-amber-800 dark:text-amber-300 uppercase mb-1">
                     {t('debts.interestRate')}
                   </label>
                   <div className="relative">
@@ -301,20 +301,20 @@ export function DebtFormModal() {
                       placeholder="10"
                       value={interestRate}
                       onChange={(e) => setInterestRate(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-white border border-amber-200 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:border-amber-500"
+                      className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800/60 rounded-lg text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-amber-500"
                     />
-                    <span className="absolute right-2.5 top-1.5 text-xs text-amber-700 font-bold">%</span>
+                    <span className="absolute right-2.5 top-1.5 text-xs text-amber-700 dark:text-amber-400 font-bold">%</span>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-amber-800 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-amber-800 dark:text-amber-300 uppercase mb-1">
                     {t('debts.interestType')}
                   </label>
                   <select
                     value={interestType}
                     onChange={(e) => setInterestType(e.target.value)}
-                    className="w-full px-2 py-1.5 bg-white border border-amber-200 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500"
+                    className="w-full px-2 py-1.5 bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800/60 rounded-lg text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-amber-500"
                   >
                     <option value="flat">{t('debts.flatInterest')}</option>
                     <option value="monthly">{t('debts.monthlyInterest')}</option>
@@ -324,7 +324,7 @@ export function DebtFormModal() {
 
               {/* Quick Interest Presets */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
-                <span className="text-[10px] text-amber-700 font-medium whitespace-nowrap">Hızlı:</span>
+                <span className="text-[10px] text-amber-700 dark:text-amber-400 font-medium whitespace-nowrap">Hızlı:</span>
                 {INTEREST_PRESETS.map((val) => (
                   <button
                     key={val}
@@ -333,7 +333,7 @@ export function DebtFormModal() {
                     className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors ${
                       interestRate === val
                         ? 'bg-amber-600 text-white border-amber-600'
-                        : 'bg-white text-amber-800 border-amber-200 hover:bg-amber-100/50'
+                        : 'bg-white dark:bg-slate-800 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800/60 hover:bg-amber-100/50 dark:hover:bg-amber-900/30'
                     }`}
                   >
                     %{val}
@@ -343,21 +343,21 @@ export function DebtFormModal() {
 
               {/* Interest Breakdown preview */}
               {numPrincipal > 0 && numRate > 0 && (
-                <div className="p-2.5 bg-white/90 rounded-xl border border-amber-200/80 text-xs space-y-1">
-                  <div className="flex justify-between text-slate-600">
+                <div className="p-2.5 bg-white/90 dark:bg-slate-800/90 rounded-xl border border-amber-200/80 dark:border-amber-800/40 text-xs space-y-1">
+                  <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>{t('debts.principalAmount')}:</span>
-                    <span className="font-semibold text-slate-800">{formatMoney(numPrincipal)}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">{formatMoney(numPrincipal)}</span>
                   </div>
-                  <div className="flex justify-between text-amber-700">
+                  <div className="flex justify-between text-amber-700 dark:text-amber-400">
                     <span>
                       {t('debts.interestAmount')} (%{numRate}
                       {interestType === 'monthly' && isInstallment ? ` x ${numInstallments} ay` : ''}):
                     </span>
                     <span className="font-bold">+{formatMoney(computedInterestAmount)}</span>
                   </div>
-                  <div className="flex justify-between text-slate-900 pt-1 border-t border-amber-100 font-bold">
+                  <div className="flex justify-between text-slate-900 dark:text-slate-100 pt-1 border-t border-amber-100 dark:border-amber-900/40 font-bold">
                     <span>{t('debts.totalRepayment')}:</span>
-                    <span className="text-amber-800 text-sm font-extrabold">{formatMoney(computedTotalAmount)}</span>
+                    <span className="text-amber-800 dark:text-amber-300 text-sm font-extrabold">{formatMoney(computedTotalAmount)}</span>
                   </div>
                 </div>
               )}
@@ -366,18 +366,18 @@ export function DebtFormModal() {
         </div>
 
         {/* Installment Plan Card */}
-        <div className="p-3.5 bg-sky-50/70 border border-sky-200/80 rounded-2xl space-y-3">
+        <div className="p-3.5 bg-sky-50/70 dark:bg-sky-950/20 border border-sky-200/80 dark:border-sky-800/40 rounded-2xl space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-sky-900 flex items-center gap-1.5">
-              <Layers className="w-4 h-4 text-sky-600" />
+            <span className="text-xs font-bold text-sky-900 dark:text-sky-200 flex items-center gap-1.5">
+              <Layers className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               <span>{t('debts.isInstallment')}</span>
             </span>
-            <div className="flex bg-sky-100/70 p-0.5 rounded-lg border border-sky-200">
+            <div className="flex bg-sky-100/70 dark:bg-sky-900/40 p-0.5 rounded-lg border border-sky-200 dark:border-sky-800/50">
               <button
                 type="button"
                 onClick={() => setIsInstallment(false)}
                 className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition-all ${
-                  !isInstallment ? 'bg-white text-slate-800 shadow-2xs' : 'text-sky-800 hover:text-sky-950'
+                  !isInstallment ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-2xs' : 'text-sky-800 dark:text-sky-300 hover:text-sky-950 dark:hover:text-sky-100'
                 }`}
               >
                 {t('debts.singlePayment')}
@@ -386,7 +386,7 @@ export function DebtFormModal() {
                 type="button"
                 onClick={() => setIsInstallment(true)}
                 className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition-all ${
-                  isInstallment ? 'bg-sky-600 text-white shadow-2xs' : 'text-sky-800 hover:text-sky-950'
+                  isInstallment ? 'bg-sky-600 text-white shadow-2xs' : 'text-sky-800 dark:text-sky-300 hover:text-sky-950 dark:hover:text-sky-100'
                 }`}
               >
                 {t('debts.installmentPlan')}
@@ -398,7 +398,7 @@ export function DebtFormModal() {
             <div className="space-y-2.5 pt-1">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-semibold text-sky-800 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-sky-800 dark:text-sky-300 uppercase mb-1">
                     {t('debts.installmentCount')}
                   </label>
                   <input
@@ -411,12 +411,12 @@ export function DebtFormModal() {
                       setInstallmentCount(e.target.value);
                       setCustomInstallmentAmount('');
                     }}
-                    className="w-full px-2.5 py-1.5 bg-white border border-sky-200 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:border-sky-500"
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-sky-200 dark:border-sky-800/60 rounded-lg text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-sky-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-sky-800 uppercase mb-1">
+                  <label className="block text-[10px] font-semibold text-sky-800 dark:text-sky-300 uppercase mb-1">
                     {t('debts.monthlyInstallment')}
                   </label>
                   <input
@@ -425,14 +425,14 @@ export function DebtFormModal() {
                     placeholder={autoMonthlyAmount ? autoMonthlyAmount.toFixed(2) : '0'}
                     value={customInstallmentAmount !== '' ? customInstallmentAmount : (autoMonthlyAmount > 0 ? autoMonthlyAmount : '')}
                     onChange={(e) => setCustomInstallmentAmount(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-white border border-sky-200 rounded-lg text-xs font-bold text-sky-900 focus:outline-none focus:border-sky-500"
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-sky-200 dark:border-sky-800/60 rounded-lg text-xs font-bold text-sky-900 dark:text-sky-300 focus:outline-none focus:border-sky-500"
                   />
                 </div>
               </div>
 
               {/* Installment count presets */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
-                <span className="text-[10px] text-sky-700 font-medium whitespace-nowrap">Taksit:</span>
+                <span className="text-[10px] text-sky-700 dark:text-sky-400 font-medium whitespace-nowrap">Taksit:</span>
                 {INSTALLMENT_PRESETS.map((cnt) => (
                   <button
                     key={cnt}
@@ -444,7 +444,7 @@ export function DebtFormModal() {
                     className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors ${
                       parseInt(installmentCount, 10) === cnt
                         ? 'bg-sky-600 text-white border-sky-600'
-                        : 'bg-white text-sky-800 border-sky-200 hover:bg-sky-100/50'
+                        : 'bg-white dark:bg-slate-800 text-sky-800 dark:text-sky-300 border-sky-200 dark:border-sky-800/60 hover:bg-sky-100/50 dark:hover:bg-sky-900/30'
                     }`}
                   >
                     {cnt}
@@ -453,15 +453,15 @@ export function DebtFormModal() {
               </div>
 
               {/* Installment Summary Info */}
-              <div className="p-2.5 bg-white/90 rounded-xl border border-sky-200/80 text-xs space-y-1">
-                <div className="flex justify-between text-slate-700 font-semibold">
+              <div className="p-2.5 bg-white/90 dark:bg-slate-800/90 rounded-xl border border-sky-200/80 dark:border-sky-800/40 text-xs space-y-1">
+                <div className="flex justify-between text-slate-700 dark:text-slate-300 font-semibold">
                   <span>{t('debts.monthlyInstallment')}:</span>
-                  <span className="text-sky-700 font-bold">{formatMoney(effectiveMonthlyAmount)} / ay</span>
+                  <span className="text-sky-700 dark:text-sky-400 font-bold">{formatMoney(effectiveMonthlyAmount)} / ay</span>
                 </div>
                 {plannedEndDate && dueDate && (
-                  <div className="flex justify-between text-[11px] text-slate-500 pt-0.5 border-t border-sky-100">
+                  <div className="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-0.5 border-t border-sky-100 dark:border-sky-900/40">
                     <span>{t('debts.lastInstallmentDate')}:</span>
-                    <span className="font-semibold text-slate-700">{formatDate(plannedEndDate)}</span>
+                    <span className="font-semibold text-slate-700 dark:text-slate-300">{formatDate(plannedEndDate)}</span>
                   </div>
                 )}
               </div>
@@ -472,25 +472,25 @@ export function DebtFormModal() {
         {/* Dates: Debt / Transaction Date & Due Date */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {t('debts.debtDate', 'Borç / İşlem Tarihi')}
             </label>
             <input
               type="date"
               value={debtDate}
               onChange={(e) => setDebtDate(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               {isInstallment ? t('debts.firstInstallmentDate') : t('debts.dueDate')}
             </label>
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
             />
           </div>
         </div>
@@ -498,16 +498,16 @@ export function DebtFormModal() {
         {/* Linked Accounts Section: 1) Initial Cash Flow, 2) Future Repayments */}
         <div className="space-y-3">
           {/* Account 1: Entry / Exit Account (Initial Cash Flow) */}
-          <div className="p-3.5 bg-slate-50 border border-slate-200/90 rounded-2xl space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-              <CreditCard className="w-4 h-4 text-slate-500" />
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/90 dark:border-slate-700/80 rounded-2xl space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+              <CreditCard className="w-4 h-4 text-slate-500 dark:text-slate-400" />
               <span>
                 {type === DEBT_TYPES.BORROWED
                   ? t('debts.borrowedEntryAccountLabel', 'Paranın Yatacağı Hesap (Borç Aldığım Tutar Hangi Hesabıma Yatsın?)')
                   : t('debts.lentEntryAccountLabel', 'Paranın Çıktığı Hesap (Borç Verdiğim Tutar Hangi Hesabımdan Düşsün?)')}
               </span>
             </label>
-            <p className="text-[11px] text-slate-500 leading-tight">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
               {type === DEBT_TYPES.BORROWED
                 ? t('debts.borrowedEntryAccountSubtitle', 'Borç aldığınız tutar seçtiğiniz bu hesaba hemen yatırılarak bakiyeniz artırılır.')
                 : t('debts.lentEntryAccountSubtitle', 'Borç verdiğiniz tutar seçtiğiniz bu hesaptan hemen düşülerek bakiyeniz azaltılır.')}
@@ -515,7 +515,7 @@ export function DebtFormModal() {
             <select
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500 mt-1 shadow-2xs"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 mt-1 shadow-2xs"
             >
               <option value="">{t('debts.noLinkedAccount')}</option>
               {accounts.map((acc) => (
@@ -527,12 +527,12 @@ export function DebtFormModal() {
 
             {/* Sync Account Balance Checkbox on Initial Creation */}
             {!editingDebt && accountId && numPrincipal > 0 ? (
-              <label className="flex items-start gap-2.5 cursor-pointer mt-2 pt-2 border-t border-slate-200/80 text-xs font-semibold text-slate-700 bg-white/80 p-2.5 rounded-xl border border-slate-200/50">
+              <label className="flex items-start gap-2.5 cursor-pointer mt-2 pt-2 border-t border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white/80 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-700/60">
                 <input
                   type="checkbox"
                   checked={syncAccountBalance}
                   onChange={(e) => setSyncAccountBalance(e.target.checked)}
-                  className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer mt-0.5"
+                  className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer mt-0.5 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
                 />
                 <span className="leading-snug">
                   {type === DEBT_TYPES.BORROWED
@@ -541,23 +541,23 @@ export function DebtFormModal() {
                 </span>
               </label>
             ) : editingDebt && accountId ? (
-              <div className="text-[11px] text-slate-500 italic mt-1 pt-1.5 border-t border-slate-200/60">
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 italic mt-1 pt-1.5 border-t border-slate-200/60 dark:border-slate-700/60">
                 {t('debts.editModeAccountNotice')}
               </div>
             ) : null}
           </div>
 
           {/* Account 2: Repayment / Collection Account (Future Cash Flow) */}
-          <div className="p-3.5 bg-slate-50 border border-slate-200/90 rounded-2xl space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-              <CreditCard className="w-4 h-4 text-emerald-600" />
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/90 dark:border-slate-700/80 rounded-2xl space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+              <CreditCard className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>
                 {type === DEBT_TYPES.BORROWED
                   ? t('debts.borrowedRepayAccountLabel', 'Borcu Ödeyeceğim Hesap (Hangi Hesabımla Ödeyeceğim?)')
                   : t('debts.lentRepayAccountLabel', 'Alacağın Geleceği Hesap (Alacağım Borç Hangi Hesabıma Gelecek?)')}
               </span>
             </label>
-            <p className="text-[11px] text-slate-500 leading-tight">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
               {type === DEBT_TYPES.BORROWED
                 ? t('debts.borrowedRepayAccountSubtitle', 'İleride borç taksitleri veya ödemeleri varsayılan olarak bu hesabımdan/kartımdan düşecek.')
                 : t('debts.lentRepayAccountSubtitle', 'İleride bu alacağın geri ödemesi varsayılan olarak bu banka veya cüzdanıma yatacak.')}
@@ -565,7 +565,7 @@ export function DebtFormModal() {
             <select
               value={repaymentAccountId}
               onChange={(e) => setRepaymentAccountId(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-emerald-500 mt-1 shadow-2xs"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 mt-1 shadow-2xs"
             >
               <option value="">
                 {accountId
@@ -583,7 +583,7 @@ export function DebtFormModal() {
 
         {/* Note */}
         <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             {t('transactions.note')}
           </label>
           <input
@@ -591,7 +591,7 @@ export function DebtFormModal() {
             placeholder="Açıklama veya borç nedeni..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
