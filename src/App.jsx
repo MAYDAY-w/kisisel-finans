@@ -32,9 +32,11 @@ import { SalaryModal } from './components/recurring/SalaryModal';
 import { AiAdvisorModal } from './components/ai/AiAdvisorModal';
 import { InstallAppModal } from './components/layout/InstallAppModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { usePwaCapabilities } from './hooks/usePwaCapabilities';
 
 function MainLayout() {
   const { activeTab, viewingReceipt, closeReceiptViewer } = useFinance();
+  usePwaCapabilities();
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200 selection:bg-primary-100 selection:text-primary-900">

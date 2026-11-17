@@ -1,0 +1,180 @@
+{
+  "id": "/?source=pwa",
+  "name": "Kişisel Finans - Akıllı Bütçe ve Harcama Takibi",
+  "short_name": "Finans",
+  "description": "Fiş tara, sesle harcama kaydet, bütçeni, borçlarını ve yatırımlarını tek noktadan profesyonelce yönet.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#0f172a",
+  "theme_color": "#059669",
+  "orientation": "any",
+  "lang": "tr",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "categories": [
+    "finance",
+    "productivity",
+    "utilities",
+    "business"
+  ],
+  "launch_handler": {
+    "client_mode": [
+      "navigate-existing",
+      "auto"
+    ]
+  },
+  "edge_side_panel": {
+    "preferred_width": 480
+  },
+  "handle_links": "preferred",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Masaüstü Finansal Genel Bakış ve Analiz Raporları"
+    },
+    {
+      "src": "/screenshot-2.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobil Bütçe, Harcama ve İşlem Takibi"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Yeni İşlem Ekle",
+      "short_name": "İşlem Ekle",
+      "description": "Hızlıca yeni bir gelir veya gider kaydı oluşturun",
+      "url": "/?action=new-transaction",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Aylık Bütçe Takibi",
+      "short_name": "Bütçe",
+      "description": "Kategori ve genel bütçe limitlerinizi görüntüleyin",
+      "url": "/?tab=budget",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Yatırım Portföyü",
+      "short_name": "Yatırımlar",
+      "description": "Altın, döviz, hisse ve fon portföyünüzü inceleyin",
+      "url": "/?tab=investments",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Hesaplar ve Kartlar",
+      "short_name": "Hesaplar",
+      "description": "Banka hesapları, nakit ve kredi kartı bakiyeleri",
+      "url": "/?tab=accounts",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/?action=share-target",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/?action=import-json",
+      "name": "Kişisel Finans Yedek Dosyası",
+      "accept": {
+        "application/json": [
+          ".json"
+        ]
+      },
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "action": "/?action=import-csv",
+      "name": "Banka Ekstresi / CSV Tablosu",
+      "accept": {
+        "text/csv": [
+          ".csv"
+        ]
+      },
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+finans",
+      "url": "/?url=%s"
+    }
+  ]
+}
