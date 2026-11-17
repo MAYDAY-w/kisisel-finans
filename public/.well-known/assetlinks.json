@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.netlify.kisisel_finans.twa",
+    "sha256_cert_fingerprints": [
+      "1E:F4:1F:70:AA:2B:76:18:BA:83:43:71:1E:2E:1B:1A:63:99:AB:AB:03:C7:63:9B:6D:7A:71:6B:EA:F9:6A:DE"
+    ]
+  }
+}]
