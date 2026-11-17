@@ -43,6 +43,13 @@ export function FinanceProvider({ children }) {
   const [settings, setSettings] = useState(() => StorageService.getSettings());
   const [accounts, setAccounts] = useState(() => StorageService.getAccounts());
   const [budgets, setBudgets] = useState(() => StorageService.getBudgets());
+  // Overall budget configuration (totalBudget + tier limits)
+  const [overallBudget, setOverallBudget] = useState(() => {
+    try {
+      const data = localStorage.getItem('finans_overall_budget_v1');
+      return data ? JSON.parse(data) : { totalBudget: 0, upperLimit: 0, averageLimit: 0, lowerLimit: 0 };
+    } catch { return { totalBudget: 0, upperLimit: 0, averageLimit: 0, lowerLimit: 0 }; }
+  });
   const [debts, setDebts] = useState(() => StorageService.getDebts());
   const [recurring, setRecurring] = useState(() => StorageService.getRecurring());
 
@@ -112,6 +119,7 @@ export function FinanceProvider({ children }) {
   useEffect(() => { StorageService.saveSettings(settings); }, [settings]);
   useEffect(() => { StorageService.saveAccounts(accounts); }, [accounts]);
   useEffect(() => { StorageService.saveBudgets(budgets); }, [budgets]);
+  useEffect(() => { try { localStorage.setItem('finans_overall_budget_v1', JSON.stringify(overallBudget)); } catch {} }, [overallBudget]);
   useEffect(() => { StorageService.saveDebts(debts); }, [debts]);
   useEffect(() => { StorageService.saveRecurring(recurring); }, [recurring]);
 
@@ -601,6 +609,10 @@ export function FinanceProvider({ children }) {
   }, [accounts]);
 
   // --- Budget Actions ---
+  const saveOverallBudget = useCallback((data) => {
+    setOverallBudget((prev) => ({ ...prev, ...data }));
+  }, []);
+
   const setBudget = useCallback((budgetData) => {
     setBudgets((prev) => {
       const existingIndex = prev.findIndex((b) => b.categoryId === budgetData.categoryId);
@@ -1522,6 +1534,8 @@ export function FinanceProvider({ children }) {
     // Budget functions
     setBudget,
     deleteBudget,
+    overallBudget,
+    saveOverallBudget,
 
     // Debt functions
     addDebt,
